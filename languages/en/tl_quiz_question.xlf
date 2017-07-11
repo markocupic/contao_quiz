@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="system/modules/quiz/languages/en/tl_quiz_question.php" source-language="en">
+    <body>
+      <trans-unit id="tl_quiz_question.question.0">
+        <source>Question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.question.1">
+        <source>Please enter the question.</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.author.0">
+        <source>Author</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.author.1">
+        <source>Here you can change the author of the question.</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.image_legend">
+        <source>Image settings</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.addImage.0">
+        <source>Add an image</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.addImage.1">
+        <source>Add an image to the FAQ.</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.settings_legend">
+        <source>Question settings</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.rating.0">
+        <source>Rating</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.rating.1">
+        <source>Here you can rate the question.</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answerlink.0">
+        <source>Website with answer</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.answerlink.1">
+        <source>If user gives wrong answer, this URL will given in result.</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers.0">
+        <source>Possible answers to this question</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers.1">
+        <source>Here you can give different possible answers and you have to define witch are true.</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_legend">
+        <source>Answers</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answer">
+        <source>Answer</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answer_true">
+        <source>true</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort.0">
+        <source>Sort answers by random</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort.1">
+        <source>Determine whether the answers are sorted randomly in the collection. This setting overrides the module setting.</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort_select_options.1">
+        <source>random sort</source>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort_select_options.2">
+        <source>no random sort</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.published.0">
+        <source>Publish the question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.published.1">
+        <source>Make the question publicly visible on the website.</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.title_legend">
+        <source>Title and author</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.publish_legend">
+        <source>Publish settings</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.new.0">
+        <source>New question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.new.1">
+        <source>Create a new question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.show.0">
+        <source>Show question details</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.show.1">
+        <source>Show the details of question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.edit.0">
+        <source>Edit question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.edit.1">
+        <source>Edit question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.copy.0">
+        <source>Duplicate question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.copy.1">
+        <source>Duplicate question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.cut.0">
+        <source>Move question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.cut.1">
+        <source>Move question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.delete.0">
+        <source>Delete question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.delete.1">
+        <source>Delete question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.toggle.0">
+        <source>Publish/unpublish question</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.toggle.1">
+        <source>Publish/unpublish question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.editheader.0">
+        <source>Edit category</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.editheader.1">
+        <source>Edit the category settings</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pasteafter.0">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pasteafter.1">
+        <source>Paste after question ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pastenew.0">
+        <source>Add new at the top</source>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pastenew.1">
+        <source>Add new after question ID %s</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

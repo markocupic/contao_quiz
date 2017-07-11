@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="system/modules/faq/languages/en/tl_module.php" source-language="en">
+    <body>
+      <trans-unit id="tl_module.quiz_categories.0">
+        <source>Quiz categories</source>
+		<target>Quiz Kategorien</target>
+      </trans-unit>
+      <trans-unit id="tl_module.quiz_categories.1">
+        <source>Adds the quiz categories to the page</source>
+		<target>Legen Sie fest aus welchen Kategorien die Fragen für den Quiz kommen.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.quiz_teaser.0">
+        <source>Quiz teaser</source>
+		<target>Einleitungstext</target>
+      </trans-unit>
+      <trans-unit id="tl_module.quiz_teaser.1">
+        <source>If you define a teaser, this appears before the actual quiz. Depending on the additional configuration, the user is able to specify the number of questions, the level of difficulty and an e-mail for the quiz review.</source>
+		<target>Wenn Sie einen Einleitungstext definieren, erscheint dieser vor dem eigentlichen Quiz. Der Nutzer kann dann je nach weitere Konfiguration auch die Anzahl der Fragen, den Schwierigkeitsgrad und eine E-Mail für die Quizauswertung angeben und kann den Quiz per Button starten.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.question_count.0">
+        <source>Number of questions</source>
+		<target>Anzahl Fragen</target>
+      </trans-unit>
+      <trans-unit id="tl_module.question_count.1">
+        <source>Set the max. number of questions fixed or give the user a selection before the quiz starts (eg 10,15,25).</source>
+		<target>Legen Sie die max. Anzahl der Fragen fest oder geben Sie dem Nutzer eine Auswahl vor (z.B. 10,15,25).</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.question_sort.0">
+        <source>Sort questions</source>
+		<target>Sortierung der Fragen</target>
+      </trans-unit>
+      <trans-unit id="tl_module.question_sort.1">
+        <source>Set how the questions are sorted at the collection in the quiz.</source>
+		<target>Legen Sie fest wie die Fragen bei der Auflistung innerhalb der Kategorien im Quiz sortiert werden.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.question_cat_count.0">
+        <source>Questions per category (%)</source>
+		<target>Fragen pro Kategorie (%)</target>
+      </trans-unit>
+      <trans-unit id="tl_module.question_cat_count.1">
+        <source>Set the percentage distribution of questions per category (eg for three categories 30,50,20). So there are offered questions selected from any desired categories, if number of questions is set.</source>
+		<target>Legen Sie die prozentuale Verteilung der Fragen pro Kategorie fest (z.B. bei drei Kategorien 30,50,20). So wird gewährleisted, dass auch bei einer begrenzten Anzahl, Fragen aus allen gewünschten Kategorien ausgewählt werden.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.answers_sort.0">
+        <source>Sort answers by random</source>
+		<target>Antworten zufällig sortieren</target>
+      </trans-unit>
+      <trans-unit id="tl_module.answers_sort.1">
+        <source>Determine whether the answers are sorted randomly in the collection. This setting can be overridden individually on the questions themselves.</source>
+		<target>Legen Sie fest, ob die Antworten bei der Auflistung zufällig sortiert werden. Diese Einstellung kann bei den Fragen selber individuell überschrieben werden.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.level_legend">
+        <source>Skill level settings</source>
+		<target>Schwierigkeitstufen-Einstellungen</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.addLevel.0">
+        <source>Set different skill levels</source>
+		<target>Unterschiedliche Schwierigkeitstufen festlegen</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.addLevel.1">
+        <source>Specify whether and which skill levels you want in the quiz. There for you have to put various ratings to the questions.</source>
+		<target>Legen Sie fest, ob und welche Schwierigkeitstufen Sie im Quiz zur Auswahl geben. Dazu müssen bei den Fragen unterschiedliche Werigkeiten eingetragen werden.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.quiz_level.0">
+        <source>Skill levels</source>
+		<target>Schwierigkeitstufen</target>
+      </trans-unit>
+      <trans-unit id="tl_module.quiz_level.1">
+        <source>Refer to each skill level a title and the rating of the questions in a comma-separated list and set the standard value for the starting form.</source>
+		<target>Tragen Sie für jede Schwierigkeitstufe jeweils eine Bezeichnung und die Wertigkeiten der Fragen in einer Komma getrennten Liste ein und legen fest, welche die Standardvorgabe im Startformular ist.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.question_sort_select.sorting">
+        <source>Sorting</source>
+		<target>indiv. Sortierung</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.question_sort_select.rating">
+        <source>Rating</source>
+		<target>Wertigkeit</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.question_sort_select.random">
+        <source>Randomize</source>
+		<target>per Zufall</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.level_title">
+        <source>Title</source>
+		<target>Bezeichnung</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.level_ratings">
+        <source>Ratings</source>
+		<target>Wertigkeiten</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.level_standard_rating">
+        <source>Standard</source>
+		<target>Standard</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.results_legend">
+        <source>Result settings</source>
+		<target>Ergebnis-Einstellungen</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.save_results.0">
+        <source>Save results</source>
+		<target>Ergebnisse speichern</target>
+      </trans-unit>
+      <trans-unit id="tl_module.save_results.1">
+        <source>You can save hte quiz results. Then date, module , level, number of questions, time, resultdata , userID, username are stored in a separate table (tl_quiz_results). This could be used to realize evaluations or rankings.</source>
+		<target>Legen Sie fest, ob die Ergebnisse gespeichert werden sollen. Daten wie Datum, Quizmodul, Schierigkeitsstufe, Anzahl der Fragen, Zeit, Ergebniswerte, Miglieder-ID und Username werden dann in einer eigenen Tabelle (tl_quiz_results) gespeichert. So können z.B. Auswertungen und Ranglisten realsiert werden.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.quizTpl.0">
+        <source>Quiz template</source>
+		<target>Quiztemplate</target>
+      </trans-unit>
+      <trans-unit id="tl_module.quizTpl.1">
+        <source>Here you can choose the quiz template.</source>
+		<target>Hier können Sie das Quiztemplate auswählen.</target>
+      </trans-unit>
+	  <trans-unit id="tl_module.quizformTpl.0">
+        <source>Quiz starting form template</source>
+		<target>Formulartemplate</target>
+      </trans-unit>
+      <trans-unit id="tl_module.quizformTpl.1">
+        <source>Here you can choose the form template.</source>
+		<target>Hier können Sie das Formulartemplate auswählen.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

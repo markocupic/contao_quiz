@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="system/modules/quiz/languages/en/default.php" source-language="en">
+    <body>
+      <trans-unit id="MSC.quizCreatedBy">
+        <source>Last update on %s by %s.</source>
+        <target>Zuletzt aktualisiert am %s von %s.</target>
+      </trans-unit>
+	  <trans-unit id="MSC.question_count">
+        <source>Number of questions</source>
+		<target>Anzahl Fragen</target>
+      </trans-unit>
+	  <trans-unit id="MSC.quiz_level">
+        <source>Quiz level</source>
+		<target>Schwierigkeitgrad</target>
+      </trans-unit>
+	  <trans-unit id="MSC.quiz_email">
+        <source>E-Mail for quiz results</source>
+		<target>E-Mail für Auswertung</target>
+      </trans-unit>
+	  <trans-unit id="MSC.quiz_start">
+        <source>Start quiz</source>
+		<target>Quiz starten</target>
+      </trans-unit>
+	  <trans-unit id="MSC.quiz_submit">
+        <source>Check the resluts</source>
+		<target>Quiz auswerten</target>
+      </trans-unit>
+	  <trans-unit id="MSC.incorrect_answer">
+        <source>Incorrect answer!</source>
+		<target>Frage nicht richtig beantwortet!</target>
+      </trans-unit>
+	  <trans-unit id="MSC.correct_answer">
+        <source>Correct answer!</source>
+		<target>Frage richtig beantwortet!</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_headline">
+        <source>Evaluation of your answers</source>
+		<target>Auswertung Ihrer Antworten</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_subline">
+        <source>Evaluation and analysis</source>
+		<target>Auswertung und Analyse</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_text_headline">
+        <source>Some words</source>
+		<target>Einge Worte zum Ergebnis</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_ratings">
+        <source>Points total: %s/%s</source>
+		<target>Punkte insgesamt: %s/%s</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_linklist_headline">
+        <source>The correct answers can be found on the following pages</source>
+		<target>Richtige Antworten finden Sie auf folgenden Seiten</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_mailsend">
+        <source>The evaluation and analysis is also sent by e-mail to %s.</source>
+		<target>Die Auswertung und Analyse wird auch per E-Mail an %s gesendet.</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_mail_subject">
+        <source>Your quiz evaluation and analysis (%s)</source>
+		<target>Ihre Quiz-Auswertung und -Analyse (%s)</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis_errorcat">
+        <source>Mistake in the category</source>
+		<target>Fehler in der Kategorie</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis_errorcats">
+        <source>Mistakes in the categories</source>
+		<target>Fehler in den Kategorien</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.0.0">
+        <source>Insert text here for a 0 percent result</source>
+		<target>Hier kann ein Text für ein 0% Resultat eingetragen werden ...</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.20.0">
+        <source>Insert text here for a result under 20 percent</source>
+		<target>Hier kann ein Text für ein Resultat unter 20% eingetragen werden ... %s</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.40.0">
+        <source>Insert text here for a result under 40 percent</source>
+		<target>Hier kann ein Text für ein Resultat unter 40% eingetragen werden ... %s</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.60.0">
+        <source>Insert text here for a result under 60 percent</source>
+		<target>Hier kann ein Text für ein Resultat unter 60% eingetragen werden ... %s</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.80.0">
+        <source>Insert text here for a result under 80 percent</source>
+		<target>Hier kann ein Text für ein Resultat unter 80% eingetragen werden ... %s</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.99.0">
+        <source>Insert text here for a result under 100 percent</source>
+		<target>Hier kann ein Text für ein Resultat unter 100% eingetragen werden ... %s</target>
+      </trans-unit>
+	  <trans-unit id="MSC.results_analysis.100.0">
+        <source>Insert text here for a result of 100 percent</source>
+		<target>Hier kann ein Text für ein 100% Resultat eingetragen werden ...</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

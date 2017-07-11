@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="system/modules/quiz/languages/en/tl_quiz_question.php" source-language="en">
+    <body>
+      <trans-unit id="tl_quiz_question.question.0">
+        <source>Question</source>
+		<target>Frage</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.question.1">
+        <source>Please enter the question.</source>
+		<target>Bitte geben Sie die Frage ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.author.0">
+        <source>Author</source>
+		<target>Autor</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.author.1">
+        <source>Here you can change the author of the question.</source>
+		<target>Hier können Sie den Autor der Frage ändern.</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.image_legend">
+        <source>Image settings</source>
+        <target>Bild-Einstellungen</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.addImage.0">
+        <source>Add an image</source>
+        <target>Ein Bild hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.addImage.1">
+        <source>Add an image to the FAQ.</source>
+        <target>Der Frage ein Bild hinzufügen.</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.settings_legend">
+        <source>Question settings</source>
+        <target>Einstellungen</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.rating.0">
+        <source>Rating</source>
+		<target>Wertigkeit</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.rating.1">
+        <source>Here you can rate the question.</source>
+		<target>Hier können Sie der Frage eine Wertigkeit zuordnen.</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answerlink.0">
+        <source>Website with answer</source>
+		<target>Webseite mit Antwort</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.answerlink.1">
+        <source>If user gives wrong answer, this URL will given in result.</source>
+		<target>Sofern die Frage falsch beantwortet wurde, wird bei der Auswertung ein Link zur entsprechenden Seite ausgegeben.</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers.0">
+        <source>Possible answers to this question</source>
+		<target>Mögliche Antworten auf die Frage</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers.1">
+        <source>Here you can give different possible answers and you have to define witch are true.</source>
+		<target>Hier können Sie verschiedene Antworten eintragen und müssen festlegen, welche davon richtig ist/sind.</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_legend">
+        <source>Answers</source>
+		<target>Antworten</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answer">
+        <source>Answer</source>
+		<target>Antwort</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answer_true">
+        <source>true</source>
+		<target>wahr</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort.0">
+        <source>Sort answers by random</source>
+		<target>Antworten zufällig sortieren</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort.1">
+        <source>Determine whether the answers are sorted randomly in the collection. This setting overrides the module setting.</source>
+		<target>Legen Sie fest, ob die Antworten bei der Auflistung zufällig sortiert werden. Diese Einstellung überschreibt die Moduleinstellung.</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort_select_options.1">
+        <source>random sort</source>
+		<target>zufällig sortieren</target>
+      </trans-unit>
+	  <trans-unit id="tl_quiz_question.answers_sort_select_options.2">
+        <source>no random sort</source>
+		<target>nicht zufällig sortieren</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.published.0">
+        <source>Publish the question</source>
+		<target>Frage veröffentlichen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.published.1">
+        <source>Make the question publicly visible on the website.</source>
+		<target>Die Frage auf der Webseite anzeigen.</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.title_legend">
+        <source>Title and author</source>
+		<target>Titel und Autor</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.publish_legend">
+        <source>Publish settings</source>
+        <target>Veröffentlichung</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.new.0">
+        <source>New question</source>
+        <target>Neue Frage</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.new.1">
+        <source>Create a new question</source>
+        <target>Eine neue Frage erstellen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.show.0">
+        <source>Show question details</source>
+        <target>Fragedetails</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.show.1">
+        <source>Show the details of question ID %s</source>
+        <target>Details der Frage ID %s anzeigen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.edit.0">
+        <source>Edit question</source>
+        <target>Frage bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.edit.1">
+        <source>Edit question ID %s</source>
+        <target>Frage ID %s bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.copy.0">
+        <source>Duplicate question</source>
+        <target>Frage duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.copy.1">
+        <source>Duplicate question ID %s</source>
+        <target>Frage ID %s duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.cut.0">
+        <source>Move question</source>
+        <target>Frage verschieben</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.cut.1">
+        <source>Move question ID %s</source>
+        <target>Frage ID %s verschieben</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.delete.0">
+        <source>Delete question</source>
+        <target>Frage löschen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.delete.1">
+        <source>Delete question ID %s</source>
+        <target>Frage ID %s löschen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.toggle.0">
+        <source>Publish/unpublish question</source>
+        <target>Frage veröffentlichen/unveröffentlichen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.toggle.1">
+        <source>Publish/unpublish question ID %s</source>
+        <target>Frage ID %s veröffentlichen/unveröffentlichen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.editheader.0">
+        <source>Edit category</source>
+        <target>Kategorie bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.editheader.1">
+        <source>Edit the category settings</source>
+        <target>Die Kategorie-Einstellungen bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pasteafter.0">
+        <source>Paste at the top</source>
+        <target>Oben einfügen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pasteafter.1">
+        <source>Paste after question ID %s</source>
+        <target>Nach der Frage ID %s einfügen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pastenew.0">
+        <source>Add new at the top</source>
+        <target>Neue Frage oben erstellen</target>
+      </trans-unit>
+      <trans-unit id="tl_quiz_question.pastenew.1">
+        <source>Add new after question ID %s</source>
+        <target>Neues Element nach der Frage ID %s erstellen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

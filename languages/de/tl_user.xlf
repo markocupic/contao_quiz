@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <file datatype="php" original="system/modules/quiz/languages/en/tl_user.php" source-language="en">
+    <body>
+      <trans-unit id="tl_user.quizs.0">
+        <source>Allowed quiz categories</source>
+		<target>Erlaubte Quiz-Kategorien</target>
+      </trans-unit>
+      <trans-unit id="tl_user.quizs.1">
+        <source>Here you can grant access to one or more quiz categories.</source>
+		<target>Hier können Sie den Zugriff auf eine oder mehrere Quiz-Kategorien erlauben.</target>
+      </trans-unit>
+      <trans-unit id="tl_user.quizp.0">
+        <source>Quiz category permissions</source>
+		<target>Quiz-Kategorierechte</target>
+      </trans-unit>
+      <trans-unit id="tl_user.quizp.1">
+        <source>Here you can define the quiz category permissions.</source>
+		<target>Hier können Sie die Quiz-Kategorierechte festlegen.</target>
+      </trans-unit>
+      <trans-unit id="tl_user.quiz_legend">
+        <source>Quiz permissions</source>
+		<target>Quiz-Rechte</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
