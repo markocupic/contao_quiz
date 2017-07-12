@@ -1,0 +1,15 @@
+
+<!-- indexer::stop -->
+<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+
+<?php if ($this->headline): ?>
+<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+<?php endif; ?>
+
+<p>Bitte registrieren Sie sich mit Ihrer E-Mail-Adresse, um an der Preisverlosung teilzunehmen.</p>
+
+<?= $this->form ?>
+
+
+</div>
+<!-- indexer::continue -->

@@ -23,8 +23,8 @@
 		<target>Anzahl Fragen</target>
       </trans-unit>
       <trans-unit id="tl_module.question_count.1">
-        <source>Set the max. number of questions fixed or give the user a selection before the quiz starts (eg 10,15,25).</source>
-		<target>Legen Sie die max. Anzahl der Fragen fest oder geben Sie dem Nutzer eine Auswahl vor (z.B. 10,15,25).</target>
+        <source>Set the max. number of questions fixed.</source>
+		<target>Legen Sie die max. Anzahl der Fragen fest.</target>
       </trans-unit>
 	  <trans-unit id="tl_module.question_sort.0">
         <source>Sort questions</source>
@@ -33,14 +33,6 @@
       <trans-unit id="tl_module.question_sort.1">
         <source>Set how the questions are sorted at the collection in the quiz.</source>
 		<target>Legen Sie fest wie die Fragen bei der Auflistung innerhalb der Kategorien im Quiz sortiert werden.</target>
-      </trans-unit>
-	  <trans-unit id="tl_module.question_cat_count.0">
-        <source>Questions per category (%)</source>
-		<target>Fragen pro Kategorie (%)</target>
-      </trans-unit>
-      <trans-unit id="tl_module.question_cat_count.1">
-        <source>Set the percentage distribution of questions per category (eg for three categories 30,50,20). So there are offered questions selected from any desired categories, if number of questions is set.</source>
-		<target>Legen Sie die prozentuale Verteilung der Fragen pro Kategorie fest (z.B. bei drei Kategorien 30,50,20). So wird gewährleisted, dass auch bei einer begrenzten Anzahl, Fragen aus allen gewünschten Kategorien ausgewählt werden.</target>
       </trans-unit>
 	  <trans-unit id="tl_module.answers_sort.0">
         <source>Sort answers by random</source>

@@ -1,0 +1,154 @@
+
+<!-- indexer::stop -->
+<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+
+<?php if ($this->headline): ?>
+<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+<?php endif; ?>
+
+<div class="info">
+    <?php if ($this->question_count) echo $GLOBALS['TL_LANG']['MSC']['question_count'] . ": " . $this->question_count; ?>
+    <?php if ($this->quizLevel) { echo ($this->question_count) ? " | " : ""; echo $GLOBALS['TL_LANG']['MSC']['quiz_level'] .": " . $this->quizLevel; } ?>
+</div>
+
+<form id="tl_quiz" action="<?php echo $this->action; ?>" method="post">
+    <div class="formbody">
+        <?php if ($this->show_results): ?>
+        <h2 class="center"><?php echo $GLOBALS['TL_LANG']['MSC']['results_headline']; ?></h2>
+        <?php endif; ?>
+        <input type="hidden" name="FORM_SUBMIT" value="tl_quiz" />
+        <input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">
+        <input type="hidden" name="q_question_count" value="<?php echo $this->question_count; ?>">
+        <input type="hidden" name="question_ids" value="<?php echo $this->question_ids; ?>">
+
+        <?php if ($this->quiz): ?>
+        <?php foreach($this->quiz as $category): ?>
+        <article id="category_<?php echo $category['id']; ?>" class="category <?php echo $category['class']; ?>">
+            <h3><?php echo $category['headline']; ?></h3>
+            <?php if ($category['teaser']): ?>
+            <div class="teaser">
+                <?php echo $category['teaser']; ?>
+            </div>
+            <?php endif; ?>
+            <?php if ($category['items']): ?>
+            <div class="quiz-slider">
+                <?php $i=0; ?>
+                <?php foreach ($category['items'] as $question): ?>
+                <?php $i++; ?>
+                <section id="question_<?php echo $question->id; ?>" class="slide-item question <?php echo $question->class; ?>">
+
+                    <h6>Frage <?= $i ?>/<?= $this->question_count ?></h6>
+                    <?php if (!$question->addBefore): ?>
+                    <h4><?php echo $question->question; ?></h4>
+                    <?php endif; ?>
+
+                    <?php if ($question->addImage): ?>
+                    <figure class="image_container<?php echo $question->floatClass; ?>"<?php if ($question->margin || $question->float): ?> style="<?php echo trim($question->margin . $question->float); ?>"<?php endif; ?>>
+
+                    <?php if ($question->href): ?>
+                    <a href="<?php echo $question->href; ?>"<?php echo $question->attributes; ?> title="<?php echo $question->alt; ?>">
+                    <?php endif; ?>
+
+                    <img src="<?php echo $question->src; ?>"<?php echo $question->imgSize; ?> alt="<?php echo $question->alt; ?>">
+
+                    <?php if ($question->href): ?>
+                    </a>
+                    <?php endif; ?>
+
+                    <?php if ($question->caption): ?>
+                    <figcaption class="caption" style="width:<?php echo $question->arrSize[0]; ?>px"><?php echo $question->caption; ?></figcaption>
+                    <?php endif; ?>
+
+                    </figure>
+                    <?php endif; ?>
+
+                    <?php if ($question->addBefore): ?>
+                    <h4><?php echo $question->question; ?></h4>
+                    <?php endif; ?>
+
+                    <?php echo $question->answers; ?>
+                </section>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+        </article>
+        <?php endforeach; ?>
+        <?php endif; ?>
+        <div class="slider-nav-btn-container">
+            <button class="btn btn-prev-slide">Vorherige</button>    <button class="btn btn-next-slide">N&auml;chste</button>
+        </div>
+
+        <div class="submit_container hidden">
+            <input type="submit" class="submit btn btn-primary" onclick="" value="<?php echo $this->submit; ?>" />
+        </div>
+    </div>
+</form>
+
+
+<script>
+    (function($) {
+        $(document).ready(function() {
+            var submitContainer = $('.mod_quiz .submit_container');
+
+            // Show submit button from the beginning, if there is only one slide
+            // Place oninit event before you instantiate the slider
+            $('.quiz-slider').on('init', function(event, slick){
+                controlNavBtnVisibiliy(slick, submitContainer);
+                if(slick.slideCount == 1){
+                    $(submitContainer).removeClass('hidden');
+                }
+            });
+
+            $('.quiz-slider').slick({
+                slide: '.slide-item',
+                infinite: false,
+                prevArrow: '',
+                nextArrow: '',
+            });
+
+            $('.btn-prev-slide').click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                $('.quiz-slider').slick('slickPrev');
+            });
+
+            $('.btn-next-slide').click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                $('.quiz-slider').slick('slickNext');
+
+            });
+
+
+            // On after slide change
+            $('.quiz-slider').on('afterChange', function(event, slick, currentSlide){
+                controlNavBtnVisibiliy(slick, submitContainer);
+            });
+
+            $('.mod_quiz .submit_container').click(function(e){
+                if (confirm('Wollen Sie das Quiz wirklich absenden?')) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
+        function controlNavBtnVisibiliy(slick, submitContainer)
+        {
+            if(slick.slideCount == slick.currentSlide + 1){
+                $('.btn-next-slide').addClass('disabled');
+                $(submitContainer).removeClass('hidden');
+            }else{
+                $(submitContainer).addClass('hidden');
+                $('.btn-next-slide').removeClass('disabled');
+            }
+            if(slick.currentSlide == 0){
+                $('.btn-prev-slide').addClass('disabled');
+            }else{
+                $('.btn-prev-slide').removeClass('disabled');
+            }
+        }
+    })(jQuery);
+</script>
+</div>
+<!-- indexer::continue -->

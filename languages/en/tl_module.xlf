@@ -18,19 +18,13 @@
         <source>Number of questions</source>
       </trans-unit>
       <trans-unit id="tl_module.question_count.1">
-        <source>Set the max. number of questions fixed or give the user a selection before the quiz starts (eg 10,15,25).</source>
+        <source>Set the max. number of questions fixed.</source>
       </trans-unit>
 	  <trans-unit id="tl_module.question_sort.0">
         <source>Sort questions</source>
       </trans-unit>
       <trans-unit id="tl_module.question_sort.1">
         <source>Set how the questions are sorted at the collection in the quiz.</source>
-      </trans-unit>
-	  <trans-unit id="tl_module.question_cat_count.0">
-        <source>Questions per category (%)</source>
-      </trans-unit>
-      <trans-unit id="tl_module.question_cat_count.1">
-        <source>Set the percentage distribution of questions per category (eg for three categories 30,50,20). So there are offered questions selected from any desired categories, if number of questions is set.</source>
       </trans-unit>
 	  <trans-unit id="tl_module.answers_sort.0">
         <source>Sort answers by random</source>

@@ -15,7 +15,8 @@
  * Register the classes
  */
  
-ClassLoader::addNamespaces(array('fiveBytes',));
+ClassLoader::addNamespaces(array('fiveBytes','Markocupic'));
+
 
 ClassLoader::addClasses(array
 (
@@ -23,12 +24,12 @@ ClassLoader::addClasses(array
 	'fiveBytes\myGenerateBreadcrumbClass'	=> 'system/modules/contao_quiz/src/fiveBytes/classes/myGenerateBreadcrumbClass.php',
 	
 	// Modules
-	'fiveBytes\ModuleQuiz'					=> 'system/modules/contao_quiz/src/fiveBytes/modules/ModuleQuiz.php',
+	'Markocupic\ModuleQuiz'					=> 'system/modules/contao_quiz/modules/ModuleQuiz.php',
 
 	// Models
-	'fiveBytes\QuizCategoryModel'			=> 'system/modules/contao_quiz/src/fiveBytes/models/QuizCategoryModel.php',
-	'fiveBytes\QuizQuestionModel'			=> 'system/modules/contao_quiz/src/fiveBytes/models/QuizQuestionModel.php',
-	'fiveBytes\QuizResultModel'				=> 'system/modules/contao_quiz/src/fiveBytes/models/QuizResultModel.php',
+	'Contao\QuizCategoryModel'			=> 'system/modules/contao_quiz/models/QuizCategoryModel.php',
+	'Contao\QuizQuestionModel'			=> 'system/modules/contao_quiz/models/QuizQuestionModel.php',
+    'Contao\QuizResultModel'			=> 'system/modules/contao_quiz/models/QuizResultModel.php',
 ));
 
 
@@ -37,6 +38,12 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'mod_quiz'     		=> 'system/modules/contao_quiz/templates/modules',
-	'form_quiz_start'    => 'system/modules/contao_quiz/templates/forms',
+	'mod_quiz_step_1'       => 'system/modules/contao_quiz/templates/modules/steps',
+    'mod_quiz_step_2'       => 'system/modules/contao_quiz/templates/modules/steps',
+    'mod_quiz_step_3'       => 'system/modules/contao_quiz/templates/modules/steps',
+    'mod_quiz_step_4'       => 'system/modules/contao_quiz/templates/modules/steps',
+    'mod_quiz_step_5'       => 'system/modules/contao_quiz/templates/modules/steps',
+    'mod_quiz_step_6'       => 'system/modules/contao_quiz/templates/modules/steps',
+    'notifyQuizUserByEmail' => 'system/modules/contao_quiz/templates/email',
+
 ));

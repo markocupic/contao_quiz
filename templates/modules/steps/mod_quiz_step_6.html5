@@ -1,0 +1,15 @@
+<!-- indexer::stop -->
+<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+
+<?php if ($this->headline): ?>
+<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+<?php endif; ?>
+
+<p>Herzlichen Dank fürs Mitmachen. Als Bestätigung erhalten Sie in Kürze eine E-Mail. Falls Sie bei der Verlosung gewinnen, werden Sie von uns kontaktiert. </p>
+
+<a href="<?= $this->linkStep1 ?>" class="btn btn-primary">Weiteres Quiz beginnen.</a>
+
+
+
+</div>
+<!-- indexer::continue -->
