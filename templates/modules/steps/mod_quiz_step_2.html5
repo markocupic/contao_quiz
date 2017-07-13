@@ -104,6 +104,7 @@
                 infinite: false,
                 prevArrow: '',
                 nextArrow: '',
+                adaptiveHeight: true
             });
 
             $('.btn-prev-slide').click(function(e){
@@ -132,6 +133,42 @@
                     return false;
                 }
             });
+
+            // Button handling
+            $('.button_answer').click(function(e){
+                var elButton = $(this);
+                // Radio handling
+                if($(elButton).attr('data-input-type') == 'radio')
+                {
+                   var radioId = $(elButton).attr('data-radio-id');
+                   var radio = $('#' + radioId);
+                   radio.trigger('click');
+                   $(elButton).closest('.question').find('.button_answer').each(function(){
+                       $(this).attr('aria-pressed', 'false');
+                       $(this).removeClass('active');
+                   });
+                   window.setTimeout(function(){
+                       elButton.attr('aria-pressed', 'true');
+                       elButton.addClass('active');
+                   },50);
+                }
+
+                // Checkbox handling
+                if($(elButton).attr('data-input-type') == 'checkbox')
+                {
+                    var checkboxId = $(elButton).attr('data-radio-id');
+                    var checkbox = $('#' + checkboxId);
+                    checkbox.trigger('click');
+                    if(elButton.hasClass('active'))
+                    {
+                        elButton.attr('aria-pressed', 'false');
+                        elButton.removeClass('active');
+                    }else{
+                        elButton.attr('aria-pressed', 'true');
+                        elButton.addClass('active');
+                    }
+                }
+            });
         });
         function controlNavBtnVisibiliy(slick, submitContainer)
         {
@@ -148,6 +185,10 @@
                 $('.btn-prev-slide').removeClass('disabled');
             }
         }
+
+
+
+
     })(jQuery);
 </script>
 </div>

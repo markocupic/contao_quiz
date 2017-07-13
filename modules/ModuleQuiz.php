@@ -353,8 +353,12 @@ class ModuleQuiz extends \Module
                     {
                         $tmpAnswerCode .= $tmpAnswerPic;
                     }
-                    $tmpAnswerCode .= '<input class="' . $inputType . '" type="' . $inputType . '" id="check_answer_' . $objTemp->id . '_' . $key . '" name="check_answer_' . $objTemp->id . '[]" value="' . $key . '">';
+                    $tmpAnswerCode .= '<input class="check_answer ' . $inputType . '" type="' . $inputType . '" id="check_answer_' . $objTemp->id . '_' . $key . '" name="check_answer_' . $objTemp->id . '[]" value="' . $key . '">';
                     $tmpAnswerCode .= '<label for="check_answer_' . $objTemp->id . '_' . $key . '">' . $answer['answer'] . '</label></div>';
+                    $tmpAnswerCode .= '<button type="button" aria-pressed="false" id="button_answer_' . $objTemp->id . '_' . $key . '" class="btn btn-info btn-lg button_answer" data-radio-id="check_answer_' . $objTemp->id . '_' . $key . '" data-input-type="' . $inputType . '">' . $answer['answer'] . '</button>';
+
+
+
                 }
                 $tmpAnswerCode .= '<input type="hidden" id="array_answer_' . $objTemp->id . '" name="array_answer_' . $objTemp->id . '" value="' . implode(',', array_map('intval', $tmpAnswerKeys)) . '">';
 
