@@ -11,6 +11,9 @@
       <trans-unit id="FMD.quiz">
         <source>Quiz</source>
       </trans-unit>
+      <trans-unit id="FMD.quizEventDashboard">
+        <source>Event Detail Quiz Settings</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

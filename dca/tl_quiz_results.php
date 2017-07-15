@@ -67,9 +67,17 @@ $GLOBALS['TL_DCA']['tl_quiz_results'] = array
 		(
 			'sql'                     => "varchar(64) COLLATE utf8_bin NOT NULL default ''"
 		),
+        'phone' => array
+        (
+            'sql'                     => "varchar(64) COLLATE utf8_bin NOT NULL default ''"
+        ),
 		'ip' => array
 		(
 			'sql'                     => "varchar(64) NOT NULL default ''"
-		)
+		),
+        'refEventId' => array
+        (
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
+        )
 	)
 );

@@ -104,7 +104,10 @@
                 infinite: false,
                 prevArrow: '',
                 nextArrow: '',
-                adaptiveHeight: true
+                adaptiveHeight: true,
+                accessibility: false,
+                arrows: false,
+                draggable:false
             });
 
             $('.btn-prev-slide').click(function(e){
@@ -151,6 +154,10 @@
                        elButton.attr('aria-pressed', 'true');
                        elButton.addClass('active');
                    },50);
+
+                    // Go to the next slide when the answer button was pressed!!!!
+                    $('.quiz-slider').slick('slickNext');
+
                 }
 
                 // Checkbox handling

@@ -12,7 +12,7 @@
  * Run in a custom namespace, so the class can be replaced
  */
 
-namespace Markocupic;
+namespace Markocupic\ContaoQuiz;
 
 /**
  * Class ModuleQuiz
@@ -33,6 +33,12 @@ class ModuleQuiz extends \Module
      * @var
      */
     protected $arrResult = array();
+
+    /**
+     * @referenced/assigned event
+     * Event model
+     */
+    protected $refEvent;
 
 
     /**
@@ -64,6 +70,17 @@ class ModuleQuiz extends \Module
             $objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
             return $objTemplate->parse();
+        }
+
+        // Get the referenced event from url token
+        // The token is saved in the database tl_calendar_events.eventToken
+        if(\Input::get('eventToken'))
+        {
+            $objEvent = \CalendarEventsModel::findByEventToken(\Input::get('eventToken'));
+            if($objEvent !== null)
+            {
+                $this->refEvent = $objEvent;
+            }
         }
 
         $this->quiz_categories = deserialize($this->quiz_categories);
@@ -109,6 +126,9 @@ class ModuleQuiz extends \Module
 
         // Add step index to template
         $this->Template->step = $this->step;
+
+        // Add the referenced Event to the template
+        $this->Template->refEvent = $this->refEvent;
 
 
         $arrOptions = array();
@@ -239,6 +259,11 @@ class ModuleQuiz extends \Module
                     'inputType' => 'text',
                     'eval' => array('mandatory' => true, 'rgxp' => 'email')
                 ));
+                $objForm->addFormField('phone', array(
+                    'label' => 'Ihre Telefonnummer',
+                    'inputType' => 'text',
+                    'eval' => array('mandatory' => true, 'rgxp' => 'phone')
+                ));
 
 
                 // Add Captcha
@@ -261,6 +286,11 @@ class ModuleQuiz extends \Module
                     $objResult->rating_percent = $_SESSION['mod_quiz']['rating']['rating_percent'];
                     $objResult->ip = $_SESSION['mod_quiz']['rating']['ip'];
                     $objResult->email = \Input::post('email');
+                    $objResult->phone = \Input::post('phone');
+                    if($this->refEvent !== null)
+                    {
+                        $objResult->refEventId = $this->refEvent->id;
+                    }
                     // Save to db
                     $objResult->save();
 

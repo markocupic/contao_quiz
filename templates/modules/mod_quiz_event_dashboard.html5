@@ -1,0 +1,30 @@
+
+<!-- indexer::stop -->
+<div class="<?= $this->class ?> <?= $this->tableless ? 'tableless' : 'tableform' ?> block"<?= $this->cssID ?><?php if ($this->style): ?> style="<?= $this->style ?>"<?php endif; ?>>
+
+  <?php if ($this->headline): ?>
+    <<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
+  <?php endif; ?>
+  <h2>Quiz-Einstellungen</h2>
+
+<?= $this->form ?>
+
+<?php if(count($this->arrQuizPages)): ?>
+
+<div class="quiz-button-container">
+<h2>Gewinnspiele</h2>
+<?php foreach($this->arrQuizPages as $quizPage): ?>
+<a href="<?= $quizPage['href'] ?>" title="<?= $quizPage['title'] ?>" class="btn btn-primary"><?= $quizPage['title'] ?></a>
+<?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+
+<div class="csv-download-container">
+<h2>Gewinnspielteilnehmer Downloaden</h2>
+<a href="<?= $this->csvDownloadHref ?>" title="CSV Export der Gewinnspielteilnehmer" class="btn btn-danger">CSV Export der Gewinnspielteilnehmer</a>
+</div>
+
+
+</div>
+<!-- indexer::continue -->

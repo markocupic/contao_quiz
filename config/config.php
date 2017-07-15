@@ -48,7 +48,8 @@ $GLOBALS['BE_MOD']['content']['quiz'] = array
  */
 array_insert($GLOBALS['FE_MOD']['application'], 3, array
     (
-        'quiz' => 'Markocupic\ModuleQuiz'
+        'quiz' => 'Markocupic\\ContaoQuiz\\ModuleQuiz',
+        'quizEventDashboard' => 'Markocupic\\ContaoQuiz\\ModuleQuizEventDashboard'
     )
 );
 
@@ -57,6 +58,11 @@ array_insert($GLOBALS['FE_MOD']['application'], 3, array
  */
 $GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = array('fiveBytes\myGenerateBreadcrumbClass', 'myGenerateBreadcrumb');
 
+
+if(TL_MODE == 'FE')
+{
+    $GLOBALS['TL_HOOKS']['generatePage'][] = array('Markocupic\ContaoQuiz\Hooks', 'generateQuizToken');
+}
 
 /**
  * Add permissions

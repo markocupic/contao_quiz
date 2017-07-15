@@ -5,8 +5,12 @@
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif; ?>
 
-<div class="introText">
+<div class="intro-text">
     <p><?= $this->quiz_teaser ?></p>
+</div>
+
+<div class="promo-article">
+    {{insert_article::<?= $this->refEvent->refPromoArticle ?>}}
 </div>
 
 <form id="tl_quiz" action="<?php echo $this->action; ?>" method="post">

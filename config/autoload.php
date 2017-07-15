@@ -22,9 +22,11 @@ ClassLoader::addClasses(array
 (
 	// Classes
 	'fiveBytes\myGenerateBreadcrumbClass'	=> 'system/modules/contao_quiz/src/fiveBytes/classes/myGenerateBreadcrumbClass.php',
-	
-	// Modules
-	'Markocupic\ModuleQuiz'					=> 'system/modules/contao_quiz/modules/ModuleQuiz.php',
+    'Markocupic\ContaoQuiz\Hooks'	=> 'system/modules/contao_quiz/classes/Hooks.php',
+
+    // Modules
+	'Markocupic\ContaoQuiz\ModuleQuiz'					=> 'system/modules/contao_quiz/modules/ModuleQuiz.php',
+    'Markocupic\ContaoQuiz\ModuleQuizEventDashboard'		=> 'system/modules/contao_quiz/modules/ModuleQuizEventDashboard.php',
 
 	// Models
 	'Contao\QuizCategoryModel'			=> 'system/modules/contao_quiz/models/QuizCategoryModel.php',
@@ -45,5 +47,6 @@ TemplateLoader::addFiles(array
     'mod_quiz_step_5'       => 'system/modules/contao_quiz/templates/modules/steps',
     'mod_quiz_step_6'       => 'system/modules/contao_quiz/templates/modules/steps',
     'notifyQuizUserByEmail' => 'system/modules/contao_quiz/templates/email',
+    'mod_quiz_event_dashboard' => 'system/modules/contao_quiz/templates/modules',
 
 ));
