@@ -74,19 +74,19 @@ class ModuleQuiz extends \Module
 
         // Get the referenced event from url token
         // The token is saved in the database tl_calendar_events.eventToken
-        if(\Input::get('eventToken'))
+        if (\Input::get('eventToken'))
         {
             $objEvent = \CalendarEventsModel::findByEventToken(\Input::get('eventToken'));
-            if($objEvent !== null)
+            if ($objEvent !== null)
             {
                 $this->refEvent = $objEvent;
             }
         }
 
-        $this->quiz_categories = deserialize($this->quiz_categories);
+        $this->quizCategories = deserialize($this->quizCategories);
 
         // Return if there are no categories
-        if (!is_array($this->quiz_categories) || empty($this->quiz_categories))
+        if (!is_array($this->quizCategories) || empty($this->quizCategories))
         {
             return '';
         }
@@ -106,6 +106,18 @@ class ModuleQuiz extends \Module
             $this->strTemplate = 'mod_quiz_step_' . \Input::get('step');
         }
 
+        // Store post data in the session
+        if (\Input::post('FORM_SUBMIT') == 'tl_quiz')
+        {
+            $arrData = $this->getFromSession('form_data');
+            $arrData = ($arrData === null) ? array() : $arrData;
+            foreach ($_POST as $k => $v)
+            {
+                $arrData[$k] = \Input::post($k);
+            }
+            $this->addToSession('form_data', $arrData);
+        }
+
         return parent::generate();
     }
 
@@ -114,15 +126,14 @@ class ModuleQuiz extends \Module
      */
     protected function compile()
     {
+
         // Edit the page title
         global $objPage;
         $objPage->pageTitle .= ' - ' . $GLOBALS['TL_LANG']['MSC']['step_' . $this->step . '_subline'];
 
-        // Add Form Action
-        $this->addFormActionToTemplate();
 
         // Add number of question to the template
-        $this->Template->question_count = $this->question_count;
+        $this->Template->questionCount = $this->questionCount;
 
         // Add step index to template
         $this->Template->step = $this->step;
@@ -130,15 +141,8 @@ class ModuleQuiz extends \Module
         // Add the referenced Event to the template
         $this->Template->refEvent = $this->refEvent;
 
-
-        $arrOptions = array();
-        $t = static::$strTable;
-        $tmpSort = ($this->question_sort != 'random' && $this->question_sort != '') ? "$t." . $this->question_sort : 'RAND()';
-        $arrOptions['order'] = "$t.pid, " . $tmpSort;
-        if ($this->question_count > 0)
-        {
-            $arrOptions['limit'] = $this->question_count;
-        }
+        // Add Form Action to template
+        $this->addFormActionToTemplate();
 
 
         switch ($this->step)
@@ -148,10 +152,14 @@ class ModuleQuiz extends \Module
                 unset($_SESSION['mod_quiz']);
                 $_SESSION['mod_quiz'] = array();
                 $_SESSION['mod_quiz']['stepsTraversed']['step_1'] = true;
-                // Set starting time
-                $_SESSION['mod_quiz']['quiz_start'] = time();
 
-                $this->Template->quizTeaser = $this->quiz_teaser;
+                // Set starting time
+                $this->addToSession('quiz_start', time());
+
+                // Generate questions and store question_ids in the session
+                $this->generateQuestions();
+
+                $this->Template->quizTeaser = $this->quizTeaser;
                 break;
             // Show quiz slider
             case '2':
@@ -166,23 +174,8 @@ class ModuleQuiz extends \Module
 
                 $_SESSION['mod_quiz']['stepsTraversed']['step_2'] = true;
 
-
-                // Get object with questions
-                $this->objQuiz = \QuizQuestionModel::findPublishedByPids($this->quiz_categories, $arrOptions);
-
-                // Check if there are not enough questions
-                if ($this->question_count > 0)
-                {
-                    if ($this->question_count > $this->objQuiz->count())
-                    {
-                        $this->throwErrorMessage('notEnoughQuestions');
-                    }
-                }
-
-
                 // Add quiz questions to template
-                $this->addQuizQuestionsToTemplate($this->objQuiz, $this->quiz_categories, $this->answers_sort);
-
+                $this->addQuizQuestionsToTemplate();
 
                 break;
             // Show Results
@@ -193,30 +186,29 @@ class ModuleQuiz extends \Module
                 }
                 $_SESSION['mod_quiz']['stepsTraversed']['step_3'] = true;
 
-
-                // Get the object with questions
-                $arrOptions['order'] = 'tl_quiz_question.id=' . str_replace(",", " DESC,tl_quiz_question.id=", \Input::post('question_ids')) . ' DESC';
-                $this->objQuiz = \QuizQuestionModel::findPublishedByIds(explode(",", \Input::post('question_ids')), $arrOptions);
-
                 // Get the quiz questions, user answers and the result
-                $this->addQuizResultsToTemplate($this->objQuiz, $this->quiz_categories);
+                $this->addQuizResultsToTemplate();
 
 
                 // Save result
-                unset($_SESSION['mod_quiz']['rating']);
+                $this->removeFromSession('rating');
                 $this->Template->registerUser = false;
-                if ($this->save_results && $this->arrResult['rating_percent'] == 100)
+
+                if ($this->saveResults && $this->minimumPercentScore <= $this->arrResult['rating_percent'])
                 {
-                    $_SESSION['mod_quiz']['rating'] = array(
+
+                    $userScore = array(
                         'pid' => $this->id,
                         'tstamp' => time(),
-                        'question_count' => $this->question_count,
-                        'quiztime' => time() - $_SESSION['mod_quiz']['quiz_start'],
-                        'user_rating' => $this->arrResult['user_ratings'],
-                        'max_rating' => $this->arrResult['max_rating'],
+                        'questionCount' => $this->questionCount,
+                        'quiztime' => time() - $this->getFromSession('quiz_start'),
+                        'userRating' => $this->arrResult['userRatings'],
+                        'maxRating' => $this->arrResult['maxRating'],
                         'rating_percent' => $this->arrResult['rating_percent'],
                         'ip' => $this->anonymizeIp(\Environment::get('ip')),
                     );
+
+                    $this->addToSession('rating', $userScore);
 
                     $this->Template->registerUser = true;
                 }
@@ -232,7 +224,7 @@ class ModuleQuiz extends \Module
 
 
                 // Redirect to the register page if user has reached 100%
-                if (isset($_POST['registerUser']) && $this->save_results && isset($_SESSION['mod_quiz']['rating']))
+                if (isset($_POST['registerUser']) && $this->saveResults && isset($_SESSION['mod_quiz']['rating']))
                 {
                     $this->redirectToStep(5);
                 }
@@ -247,21 +239,24 @@ class ModuleQuiz extends \Module
                 }
                 $_SESSION['mod_quiz']['stepsTraversed']['step_5'] = true;
 
-
-                $objForm = new \Haste\Form\Form('tl_quiz_register_email', 'POST', function ($objHaste)
+                // Add registration form to template
+                $objForm = new \Haste\Form\Form('tl_quiz', 'POST', function ($objHaste)
                 {
                     return \Input::post('FORM_SUBMIT') === $objHaste->getFormId();
                 });
                 $objForm->preserveGetParameters();
                 // Add the form field
-                $objForm->addFormField('email', array(
+                $formData = $this->getFromSession('form_data') ? $this->getFromSession('form_data') : array();
+                $objForm->addFormField('user_email', array(
                     'label' => 'E-Mail-Adresse',
                     'inputType' => 'text',
+                    'default' => $formData['user_email'],
                     'eval' => array('mandatory' => true, 'rgxp' => 'email')
                 ));
-                $objForm->addFormField('phone', array(
+                $objForm->addFormField('user_phone', array(
                     'label' => 'Ihre Telefonnummer',
                     'inputType' => 'text',
+                    'default' => $formData['user_phone'],
                     'eval' => array('mandatory' => true, 'rgxp' => 'phone')
                 ));
 
@@ -275,19 +270,20 @@ class ModuleQuiz extends \Module
                 if ($objForm->validate())
                 {
                     // Get the submitted and parsed data of a field (only works with POST):
-                    $arrData = $objForm->fetch('email');
                     $objResult = new \QuizResultModel();
-                    $objResult->pid = $_SESSION['mod_quiz']['rating']['pid'];
-                    $objResult->tstamp = $_SESSION['mod_quiz']['rating']['tstamp'];
-                    $objResult->question_count = $_SESSION['mod_quiz']['rating']['question_count'];
-                    $objResult->quiztime = $_SESSION['mod_quiz']['rating']['quiztime'];
-                    $objResult->user_rating = $_SESSION['mod_quiz']['rating']['user_rating'];
-                    $objResult->max_rating = $_SESSION['mod_quiz']['rating']['max_rating'];
-                    $objResult->rating_percent = $_SESSION['mod_quiz']['rating']['rating_percent'];
-                    $objResult->ip = $_SESSION['mod_quiz']['rating']['ip'];
-                    $objResult->email = \Input::post('email');
-                    $objResult->phone = \Input::post('phone');
-                    if($this->refEvent !== null)
+                    $arrSessionData = $this->getFromSession('rating');
+                    $arrSessionFormData = $this->getFromSession('form_data');
+                    $objResult->pid = $arrSessionData['pid'];
+                    $objResult->tstamp = $arrSessionData['tstamp'];
+                    $objResult->questionCount = $arrSessionData['questionCount'];
+                    $objResult->quiztime = $arrSessionData['quiztime'];
+                    $objResult->userRating = $arrSessionData['userRating'];
+                    $objResult->maxRating = $arrSessionData['maxRating'];
+                    $objResult->rating_percent = $arrSessionData['rating_percent'];
+                    $objResult->ip = $arrSessionData['ip'];
+                    $objResult->user_email = $arrSessionFormData['user_email'];
+                    $objResult->user_phone = $arrSessionFormData['user_phone'];
+                    if ($this->refEvent !== null)
                     {
                         $objResult->refEventId = $this->refEvent->id;
                     }
@@ -323,34 +319,46 @@ class ModuleQuiz extends \Module
      *
      * Gives HTML-Code for the questions and variables to the template
      */
-    protected function addQuizQuestionsToTemplate($objQuiz, $categories, $answersSort)
+    protected function addQuizQuestionsToTemplate()
     {
 
-        if ($objQuiz === null)
+        $arrQuestions = $this->getFromSession('question_ids');
+        if (!is_array($arrQuestions))
         {
             return;
         }
 
-        $arrQuiz = array_fill_keys($categories, array());
-
-
-        // Create HTML-Code for the Questions and answers
-        while ($objQuiz->next())
+        if (count($arrQuestions) < 1)
         {
-            $objTemp = (object)$objQuiz->row();
+            return;
+        }
+
+
+        $oQuiz = \QuizQuestionModel::findMultipleByIds($arrQuestions);
+
+        $arrQuizItems = array();
+        $i = 0;
+        // Create HTML-Code for the Questions and answers
+        while ($oQuiz->next())
+        {
+
+            $objQuizItem = \QuizQuestionModel::findByPk($oQuiz->id);
+            if ($objQuizItem === null)
+            {
+                continue;
+            }
 
             // Get correct input type (radio or checkbox)
-            $inputType = $this->getQuizInputType($objTemp);
-
-            $tmpQuestionIDs[] = $objTemp->id;
+            $inputType = $this->getQuizInputType($objQuizItem);
 
             $tmpAnswerCode = '';
-            $tmpAnswers = deserialize($objTemp->answers);
+            $tmpAnswers = deserialize($objQuizItem->answers);
 
             // Sort answers by random
-            if ($objTemp->answers_sort == 1 || ($answersSort && $objTemp->answers_sort < 2))
+
+            if ($objQuizItem->answersSort || $this->answersSort)
             {
-                $tmpAnswers = $this->shuffle_assoc($tmpAnswers);
+                $tmpAnswers = $this->shuffleAssoc($tmpAnswers);
             }
 
             if ($tmpAnswers)
@@ -378,148 +386,138 @@ class ModuleQuiz extends \Module
                     }
 
                     $tmpAnswerKeys[] = $key;
-                    $tmpAnswerCode .= '<div id="answer_' . $objTemp->id . '_' . $key . '" class="answer">';
+                    $tmpAnswerCode .= '<div id="answer_' . $objQuizItem->id . '_' . $key . '" class="answer">';
                     if ($tmpAnswerPic != '')
                     {
                         $tmpAnswerCode .= $tmpAnswerPic;
                     }
-                    $tmpAnswerCode .= '<input class="check_answer ' . $inputType . '" type="' . $inputType . '" id="check_answer_' . $objTemp->id . '_' . $key . '" name="check_answer_' . $objTemp->id . '[]" value="' . $key . '">';
-                    $tmpAnswerCode .= '<label for="check_answer_' . $objTemp->id . '_' . $key . '">' . $answer['answer'] . '</label></div>';
-                    $tmpAnswerCode .= '<button type="button" aria-pressed="false" id="button_answer_' . $objTemp->id . '_' . $key . '" class="btn btn-info btn-lg button_answer" data-radio-id="check_answer_' . $objTemp->id . '_' . $key . '" data-input-type="' . $inputType . '">' . $answer['answer'] . '</button>';
-
+                    $tmpAnswerCode .= '<input class="check_answer ' . $inputType . '" type="' . $inputType . '" id="check_answer_' . $objQuizItem->id . '_' . $key . '" name="check_answer_' . $objQuizItem->id . '[]" value="' . $key . '">';
+                    $tmpAnswerCode .= '<label for="check_answer_' . $objQuizItem->id . '_' . $key . '">' . $answer['answer'] . '</label></div>';
+                    $tmpAnswerCode .= '<button type="button" aria-pressed="false" id="button_answer_' . $objQuizItem->id . '_' . $key . '" class="btn btn-info btn-lg button-answer" data-radio-id="check_answer_' . $objQuizItem->id . '_' . $key . '" data-input-type="' . $inputType . '">' . $answer['answer'] . '</button>';
 
 
                 }
-                $tmpAnswerCode .= '<input type="hidden" id="array_answer_' . $objTemp->id . '" name="array_answer_' . $objTemp->id . '" value="' . implode(',', array_map('intval', $tmpAnswerKeys)) . '">';
+                $tmpAnswerCode .= '<input type="hidden" id="array_answer_' . $objQuizItem->id . '" name="array_answer_' . $objQuizItem->id . '" value="' . implode(',', array_map('intval', $tmpAnswerKeys)) . '">';
 
                 // Prevent hacking attempts
-                $_SESSION['mod_quiz']['array_answer_' . $objTemp->id] = implode(',', array_map('intval', $tmpAnswerKeys));
+                $_SESSION['mod_quiz']['array_answer_' . $objQuizItem->id] = implode(',', array_map('intval', $tmpAnswerKeys));
             }
 
             // Clean RTE output
             if ($objPage->outputFormat == 'xhtml')
             {
-                $objTemp->answers = \StringUtil::toXhtml($tmpAnswerCode);
-                $arrQuiz[$objQuiz->pid]['teaser'] = \StringUtil::toXhtml($objQuiz->getRelated('pid')->teaser);
+                $objQuizItem->answers = \StringUtil::toXhtml($tmpAnswerCode);
+                $objQuizItem->parentTeaser = \StringUtil::toXhtml($objQuizItem->getRelated('pid')->teaser);
             }
             else
             {
-                $objTemp->answers = \StringUtil::toHtml5($tmpAnswerCode);
-                $arrQuiz[$objQuiz->pid]['teaser'] = \StringUtil::toHtml5($objQuiz->getRelated('pid')->teaser);
+                $objQuizItem->answers = \StringUtil::toHtml5($tmpAnswerCode);
+                $objQuizItem->parentTeaser = \StringUtil::toHtml5($objQuizItem->getRelated('pid')->teaser);
             }
 
-            $objTemp->addImage = false;
-
+            $addImage = false;
             // Add an image
-            if ($objQuiz->addImage && $objQuiz->singleSRC != '')
+            if ($objQuizItem->addImage && $objQuizItem->singleSRC != '')
             {
-                $objModel = \FilesModel::findByUuid($objQuiz->singleSRC);
+                $objModel = \FilesModel::findByUuid($objQuizItem->singleSRC);
 
                 if ($objModel === null)
                 {
-                    if (!\Validator::isUuid($objQuiz->singleSRC))
+                    if (!\Validator::isUuid($objQuizItem->singleSRC))
                     {
-                        $objTemp->answers = '<p class="error">' . $GLOBALS['TL_LANG']['ERR']['version2format'] . '</p>';
+                        $objQuizItem->answers = '<p class="error">' . $GLOBALS['TL_LANG']['ERR']['version2format'] . '</p>';
                     }
                 }
                 elseif (is_file(TL_ROOT . '/' . $objModel->path))
                 {
                     // Do not override the field now that we have a model registry (see #6303)
-                    $arrQuizTmp = $objQuiz->row();
+                    $arrQuizTmp = $objQuizItem->row();
                     $arrQuizTmp['singleSRC'] = $objModel->path;
-                    $strLightboxId = 'lightbox[' . substr(md5('mod_quiz_' . $objQuiz->id), 0, 6) . ']'; // see #5810
-
-                    $this->addImageToTemplate($objTemp, $arrQuizTmp, null, $strLightboxId);
+                    $strLightboxId = 'lightbox[' . substr(md5('mod_quiz_' . $objQuizItem->id), 0, 6) . ']'; // see #5810
+                    $this->addImageToTemplate($objQuizItem, $arrQuizTmp, null, $strLightboxId);
+                    $addImage = true;
                 }
             }
+            $objQuizItem->addImage = $addImage;
 
-            // Order by PID
-            $arrQuiz[$objQuiz->pid]['id'] = $objQuiz->getRelated('pid')->id;
-            $arrQuiz[$objQuiz->pid]['headline'] = $objQuiz->getRelated('pid')->headline;
-            $arrQuiz[$objQuiz->pid]['items'][] = $objTemp;
+            $objQuizItem->pid = $objQuizItem->getRelated('pid')->id;
+            $objQuizItem->parentTitle = $objQuizItem->getRelated('pid')->title;
+            $objQuizItem->parentHeadline = $objQuizItem->getRelated('pid')->headline;
+            $i++;
+            $objQuizItem->questionIndex = $i;
+            $arrQuizItems[] = $objQuizItem;
         }
 
-        $arrQuiz = $this->getClasses($arrQuiz);
+        $arrQuizItems = $this->getClasses($arrQuizItems);
 
 
         $this->Template->submit = $GLOBALS['TL_LANG']['MSC']['quiz_submit'];
-        $this->Template->question_ids = implode(',', array_map('intval', $tmpQuestionIDs));
-        $this->Template->quiz = $arrQuiz;
-
+        $this->Template->quizItems = $arrQuizItems;
     }
 
     /**
      * @param $objQuiz
      * @param $categories
      */
-    protected function addQuizResultsToTemplate($objQuiz, $categories)
+    protected function addQuizResultsToTemplate()
     {
-        if (!isset($_SESSION['mod_quiz']))
+        $arrQuestions = $this->getFromSession('question_ids');
+        if (!is_array($arrQuestions))
         {
-            $this->throwErrorMessage('sessionExpired');
+            return;
         }
 
-        if ($objQuiz === null)
+        if (count($arrQuestions) < 1)
         {
-            $this->throwErrorMessage('notEnoughQuestions');
+            return;
         }
 
-        $arrQuiz = array_fill_keys($categories, array());
+        $arrQuiz = array_fill_keys($this->quizCategories, array());
 
-        $checkCatID = 0;
         $tmpUserRatings = 0;
-
+        $arrQuizItems = array();
+        $i = 0;
 
         // Get ratings and create HTML-Code for the questions, answers (users, correct ones) and comment line
-        while ($objQuiz->next())
+        $oQuiz = \QuizQuestionModel::findMultipleByIds($arrQuestions);
+        while ($oQuiz->next())
         {
-            if (!isset($_SESSION['mod_quiz']['array_answer_' . $objQuiz->id]))
+            $objQuizItem = \QuizQuestionModel::findByPk($oQuiz->id);
+            if ($objQuizItem === null)
             {
-                $this->throwErrorMessage('sessionExpired');
-            }
-            if ($_SESSION['mod_quiz']['array_answer_' . $objQuiz->id] != \Input::post('array_answer_' . $objQuiz->id))
-            {
-                $this->throwErrorMessage('intrusionDetection');
+                continue;
             }
 
-            unset($_SESSION['mod_quiz']['array_answer_' . $objQuiz->id]);
+            $this->removeFromSession('array_answer_' . $objQuizItem->id);
 
             // If user has not checked any answer in this question
-            if (!isset($_POST['check_answer_' . $objQuiz->id]))
+            $formData = $this->getFromSession('form_data');
+            if (!isset($formData['check_answer_' . $objQuizItem->id]))
             {
-                $_POST['check_answer_' . $objQuiz->id] = array();
+                $formData['check_answer_' . $objQuizItem->id] = array();
             }
 
-            $objTemp = (object)$objQuiz->row();
 
             // Get correct input type (radio or checkbox)
-            $inputType = $this->getQuizInputType($objTemp);
-
-            // Check and set category ratings
-            if ($checkCatID != $objTemp->pid)
-            {
-                $tmpCatRatings = 0;
-                $tmpUserCatRatings = 0;
-            }
+            $inputType = $this->getQuizInputType($objQuizItem);
 
             // Count the quiz ratings
-            if (!$objTemp->rating)
+            if (!$objQuizItem->rating)
             {
-                $objTemp->rating = 1;
+                $objQuizItem->rating = 1;
             }
-            $tmpMaxRatings += $objTemp->rating;
-            $tmpCatRatings += $objTemp->rating;
-            $checkCatID = $objTemp->pid;
+
+            $tmpMaxRatings += $objQuizItem->rating;
 
             $tmpAnswerCode = '';
-            $tmpAnswers = deserialize($objTemp->answers);
+            $tmpAnswers = deserialize($objQuizItem->answers);
             if ($tmpAnswers)
             {
-                $tmpAnswer = true;
-                $ArrayAnswerKeys = explode(",", \Input::post('array_answer_' . $objTemp->id));
-                foreach ($ArrayAnswerKeys as $key)
+                $answerIsCorrect = true;
+                foreach ($tmpAnswers as $key => $answer)
                 {
                     $tmpAnswerPic = '';
+
                     // Add an image
                     if ($answer['singleSRC'] != '')
                     {
@@ -534,115 +532,117 @@ class ModuleQuiz extends \Module
                         }
                         elseif (is_file(TL_ROOT . '/' . $objModel->path))
                         {
-                            $tmpAnswerPic = '<figure class="image_container">{{image::' . $objModel->path . '?width=100&height=100&rel=lightbox&alt=' . $answer['answer'] . '}}</figure>';
+                            $tmpAnswerPic = sprintf('<figure class="image_container">{{image::%s?width=100&height=100&rel=lightbox&alt=%s}}</figure>', $objModel->path, $answer['answer']);
                         }
                     }
 
-                    $answer = $tmpAnswers[$key];
                     $tmpLabelClass = "";
 
-                    // Ass picture to source code
+                    // Validate answers
+                    if ((!$answer['answerTrue'] && in_array($key, $formData['check_answer_' . $objQuizItem->id])) || ($answer['answerTrue'] && !in_array($key, $formData['check_answer_' . $objQuizItem->id])))
+                    {
+                        $answerIsCorrect = false;
+                        $tmpLabelClass = 'incorrect';
+                        $tmpAnswerCode .= '<div id="answer_' . $objQuizItem->id . '_' . $key . '" class="incorrect-answer answer">';
+                    }
+                    else
+                    {
+                        if ($answer['answerTrue'])
+                        {
+                            $tmpLabelClass = 'correct';
+                        }
+                        $tmpAnswerCode .= '<div id="answer_' . $objQuizItem->id . '_' . $key . '" class="correct-answer answer">';
+
+                    }
+
+                    // Add picture to source code
                     if ($tmpAnswerPic != '')
                     {
                         $tmpAnswerCode .= $tmpAnswerPic;
                     }
 
-                    // Validate answers
-                    if ((!$answer['answer_true'] && in_array($key, \Input::post('check_answer_' . $objTemp->id))) || ($answer['answer_true'] && !in_array($key, \Input::post('check_answer_' . $objTemp->id))))
-                    {
-                        $tmpAnswer = false;
-                        $tmpLabelClass = ' class="incorrect"';
-                        $tmpAnswerCode .= '<div id="answer_' . $objTemp->id . '_' . $key . '" class="incorrect-answer answer">';
-                    }
-                    else
-                    {
-                        if ($answer['answer_true'])
-                        {
-                            $tmpLabelClass = ' class="correct"';
-                        }
-                        $tmpAnswerCode .= '<div id="answer_' . $objTemp->id . '_' . $key . '" class="correct-answer answer">';
 
-                    }
-
-                    $tmpAnswerCode .= '<span class="control-box"><input class="' . $inputType . '" type="' . $inputType . '"';
-                    $tmpAnswerCode .= ($answer['answer_true']) ? ' checked' : '';
-                    $checked = in_array($key, \Input::post('check_answer_' . $objTemp->id)) ? ' checked' : '';
-                    $tmpAnswerCode .= ' onClick="return false;"></span><span class="users-choice' . $checked . '"><input class="' . $inputType . '" type="' . $inputType . '"';
-                    $tmpAnswerCode .= (in_array($key, \Input::post('check_answer_' . $objTemp->id))) ? ' checked' : '';
-                    $tmpAnswerCode .= ' onClick="return false;"></span>';
-
-                    $tmpAnswerCode .= '<label' . $tmpLabelClass . ' for="check_answer_' . $objTemp->id . '_' . $key . '">' . $answer['answer'] . '</label></div>';
+                    $checked = in_array($key, $formData['check_answer_' . $objQuizItem->id]) ? ' checked' : '';
+                    $tmpAnswerCode .= '<span class="control-box"></span>';
+                    $tmpAnswerCode .= '<span class="users-choice' . $checked . '"></span>';
+                    $tmpAnswerCode .= sprintf('<label class="%s" for="check_answer_%s_%s">%s</label>', $tmpLabelClass, $objQuizItem->id, $key, $answer['answer']);
+                    $tmpAnswerCode .= '</div>';
                 }
 
-                if (!$tmpAnswer)
+                if (!$answerIsCorrect)
                 {
                     $tmpAnswerCode .= '<div class="resultcomment incorrect">' . $GLOBALS['TL_LANG']['MSC']['incorrect_answer'] . '</div>';
 
                     // Create linklist with answer pages and categories with wrong answers
-                    $tmpLinklist[] = $objTemp->answerlink;
-                    $tmpErrorCat[] = $objQuiz->getRelated('pid')->title;
+                    $tmpLinklist[] = $objQuizItem->answerlink;
+                    $tmpErrorCat[] = $objQuizItem->getRelated('pid')->title;
                 }
                 else
                 {
                     $tmpAnswerCode .= '<div class="resultcomment correct">' . $GLOBALS['TL_LANG']['MSC']['correct_answer'] . '</div>';
 
                     // Count the category ratings
-                    $tmpUserRatings += $objTemp->rating;
-                    $tmpUserCatRatings += $objTemp->rating;
+                    $tmpUserRatings += $objQuizItem->rating;
                 }
             }
 
             // Clean RTE output
             if ($objPage->outputFormat == 'xhtml')
             {
-                $objTemp->answers = \StringUtil::toXhtml($tmpAnswerCode);
-                $arrQuiz[$objQuiz->pid]['teaser'] = ($objQuiz->getRelated('pid')->teaser_result) ? '' : \StringUtil::toXhtml($objQuiz->getRelated('pid')->teaser);
+                $objQuizItem->answers = \StringUtil::toXhtml($tmpAnswerCode);
+                $objQuizItem->parentTeaser = \StringUtil::toXhtml($objQuizItem->getRelated('pid')->teaser);
             }
             else
             {
-                $objTemp->answers = \StringUtil::toHtml5($tmpAnswerCode);
-                $arrQuiz[$objQuiz->pid]['teaser'] = ($objQuiz->getRelated('pid')->teaser_result) ? '' : \StringUtil::toHtml5($objQuiz->getRelated('pid')->teaser);
+                $objQuizItem->answers = \StringUtil::toHtml5($tmpAnswerCode);
+                $objQuizItem->parentTeaser = \StringUtil::toHtml5($objQuizItem->getRelated('pid')->teaser);
             }
 
-            $objTemp->addImage = false;
 
             // Add an image
-            if ($objQuiz->addImage && $objQuiz->singleSRC != '')
+            $addImage = false;
+            if ($objQuizItem->addImage && $objQuizItem->singleSRC != '')
             {
-                $objModel = \FilesModel::findByUuid($objQuiz->singleSRC);
+                $objModel = \FilesModel::findByUuid($objQuizItem->singleSRC);
 
                 if ($objModel === null)
                 {
-                    if (!\Validator::isUuid($objQuiz->singleSRC))
+                    if (!\Validator::isUuid($objQuizItem->singleSRC))
                     {
-                        $objTemp->answers = '<p class="error">' . $GLOBALS['TL_LANG']['ERR']['version2format'] . '</p>';
+                        $objQuizItem->answers = '<p class="error">' . $GLOBALS['TL_LANG']['ERR']['version2format'] . '</p>';
                     }
                 }
                 elseif (is_file(TL_ROOT . '/' . $objModel->path))
                 {
                     // Do not override the field now that we have a model registry (see #6303)
-                    $arrQuizTmp = $objQuiz->row();
+                    $arrQuizTmp = $objQuizItem->row();
                     $arrQuizTmp['singleSRC'] = $objModel->path;
-                    $strLightboxId = 'lightbox[' . substr(md5('mod_quiz_' . $objQuiz->id), 0, 6) . ']'; // see #5810
+                    $strLightboxId = 'lightbox[' . substr(md5('mod_quiz_' . $objQuizItem->id), 0, 6) . ']'; // see #5810
 
-                    $this->addImageToTemplate($objTemp, $arrQuizTmp, null, $strLightboxId);
+                    $this->addImageToTemplate($objQuizItem, $arrQuizTmp, null, $strLightboxId);
+                    $addImage = true;
                 }
             }
+            $objQuizItem->addImage = $addImage;
 
-            // Order by PID
-            $arrQuiz[$objQuiz->pid]['ratings'] = $tmpCatRatings;
-            $arrQuiz[$objQuiz->pid]['user_ratings'] = $tmpUserCatRatings;
-            $arrQuiz[$objQuiz->pid]['user_ratings_percent'] = number_format((100 / $tmpCatRatings) * $tmpUserCatRatings, 0);
-            $arrQuiz[$objQuiz->pid]['title'] = $objQuiz->getRelated('pid')->title;
-            $arrQuiz[$objQuiz->pid]['headline'] = $objQuiz->getRelated('pid')->headline;
-            $arrQuiz[$objQuiz->pid]['id'] = $objQuiz->getRelated('pid')->id;
-            $arrQuiz[$objQuiz->pid]['items'][] = $objTemp;
+            $objQuizItem->pid = $objQuizItem->getRelated('pid')->id;
+            $objQuizItem->parentTitle = $objQuizItem->getRelated('pid')->title;
+            $objQuizItem->parentHeadline = $objQuizItem->getRelated('pid')->headline;
+            $i++;
+            $objQuizItem->questionIndex = $i;
+            $arrQuizItems[] = $objQuizItem;
+
         }
 
-        $arrQuiz = $this->getClasses($arrQuiz);
+        $arrQuizItems = $this->getClasses($arrQuizItems);
+        $this->Template->quizItems = $arrQuizItems;
 
-        // Check the ratings and get the reslut analysis and the plain text for the email
+        // Check the ratings and get the result analysis and the plain text for the email
         $tmpResultPercent = number_format((100 / $tmpMaxRatings) * $tmpUserRatings, 0);
+        $this->arrResult['userRatings'] = $tmpUserRatings;
+        $this->arrResult['maxRating'] = $tmpMaxRatings;
+        $this->arrResult['rating_percent'] = $tmpResultPercent;
+        $this->addToSession('arr_result', $this->arrResult);
 
         switch ($tmpResultPercent)
         {
@@ -669,37 +669,109 @@ class ModuleQuiz extends \Module
                 break;
         }
 
-        // Check the Categories with wrong answers and add it to the result text
-        if ($tmpErrorCat)
+
+        $this->Template->userRatings = $tmpUserRatings;
+        $this->Template->maxRatings = $tmpMaxRatings;
+        $this->Template->resultText = $tmpResultText;
+        $this->Template->resultPercent = $tmpResultPercent;
+        $this->Template->quiz = $arrQuiz;
+    }
+
+    /**
+     *
+     */
+    protected function generateQuestions()
+    {
+
+        $arrOptions = array();
+        $t = static::$strTable;
+        $tmpSort = ($this->questionSort != 'random' && $this->questionSort != '') ? "$t." . $this->questionSort : 'RAND()';
+        // Order by category
+        // $arrOptions['order'] = "$t.pid, " . $tmpSort;
+
+        // No order
+        $arrOptions['order'] = $tmpSort;
+
+        if ($this->questionCount > 0)
         {
-            $tmpErrorCat = array_unique($tmpErrorCat);
-            $tmpErrorCatTxt = (count($tmpErrorCat) == 1) ? $GLOBALS['TL_LANG']['MSC']['results_analysis_errorcat'] : $GLOBALS['TL_LANG']['MSC']['results_analysis_errorcats'];
-            $tmpErrorCatTxt .= " " . implode(', ', array_map(null, $tmpErrorCat));
-            $tmpErrorCatTxt = (strrpos($tmpErrorCatTxt, ',')) ? substr_replace($tmpErrorCatTxt, ' und', strrpos($tmpErrorCatTxt, ','), 1) : $tmpErrorCatTxt;
-            $tmpResultText = sprintf($tmpResultText, $tmpErrorCatTxt);
+            $arrOptions['limit'] = $this->questionCount;
         }
 
-        $tmpMailTxt = $tmpResultText . "\n\n";
 
-        $tmpMailTxt .= sprintf($GLOBALS['TL_LANG']['MSC']['results_ratings'], $tmpUserRatings, $tmpMaxRatings) . " (" . $tmpResultPercent . " %)\n";
-        if ($arrQuiz)
+        // Get object with questions
+        $objQuiz = \QuizQuestionModel::findPublishedByPids($this->quizCategories, $arrOptions);
+        // Check if there are not enough questions
+        if ($this->questionCount === null)
         {
-            foreach ($arrQuiz as $category)
+            $this->throwErrorMessage('No quiz questions found.');
+        }
+
+        // Check if there are not enough questions
+        if ($this->questionCount > 0)
+        {
+            if ($this->questionCount > $objQuiz->count())
             {
-                $tmpMailTxt .= $category['title'] . ": " . $category['user_ratings'] . "/" . $category['ratings'] . " (" . $category['user_ratings_percent'] . " %)\n";
+                $this->throwErrorMessage('notEnoughQuestions');
             }
         }
+        $arrQuestionIds = array();
+        while ($objQuiz->next())
+        {
+            $arrQuestionIds[] = $objQuiz->id;
+        }
 
+        $this->addToSession('question_ids', $arrQuestionIds);
+        $this->addToSession('obj_quiz', serialize($objQuiz));
 
-        $this->arrResult['user_ratings'] = $tmpUserRatings;
-        $this->arrResult['max_rating'] = $tmpMaxRatings;
-        $this->arrResult['rating_percent'] = $tmpResultPercent;
+    }
 
-        $this->Template->user_ratings = $tmpUserRatings;
-        $this->Template->max_ratings = $tmpMaxRatings;
-        $this->Template->result_text = $tmpResultText;
-        $this->Template->result_percent = $tmpResultPercent;
-        $this->Template->quiz = $arrQuiz;
+    /**
+     * @param $k
+     * @param $v
+     */
+    protected function addToSession($k, $v)
+    {
+        if (!isset($_SESSION['mod_quiz']))
+        {
+            $this->throwErrorMessage('sessionExpired');
+            exit;
+        }
+        $_SESSION['mod_quiz'][$k] = $v;
+    }
+
+    /**
+     * @param $k
+     * @return null
+     */
+    protected function getFromSession($k)
+    {
+        if (!isset($_SESSION['mod_quiz']))
+        {
+            $this->throwErrorMessage('sessionExpired');
+            exit;
+        }
+        if (!isset($_SESSION['mod_quiz'][$k]) || empty($_SESSION['mod_quiz'][$k]))
+        {
+            return null;
+        }
+        return $_SESSION['mod_quiz'][$k];
+
+    }
+
+    /**
+     * @param $k
+     */
+    protected function removeFromSession($k)
+    {
+        if (!isset($_SESSION['mod_quiz']))
+        {
+            $this->throwErrorMessage('sessionExpired');
+            exit;
+        }
+        if (isset($_SESSION['mod_quiz'][$k]))
+        {
+            unset($_SESSION['mod_quiz'][$k]);
+        }
     }
 
     /**
@@ -711,6 +783,8 @@ class ModuleQuiz extends \Module
      */
     public static function getClasses($arrQuiz)
     {
+        return $arrQuiz;
+
         if ($arrQuiz === null)
         {
             return;
@@ -743,7 +817,7 @@ class ModuleQuiz extends \Module
      *
      * @return Shuffled array of answers with same keys
      */
-    public static function shuffle_assoc($array)
+    public static function shuffleAssoc($array)
     {
         // Initialize
         $shuffled_array = array();
@@ -774,7 +848,7 @@ class ModuleQuiz extends \Module
         $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
         $objEmail->subject = sprintf($GLOBALS['TL_LANG']['MSC']['results_mail_subject'], \Idna::decode(\Environment::get('host')));
         $objEmail->text = $objTemplate->parse();
-        $objEmail->sendTo($objResult->email);
+        $objEmail->sendTo($objResult->user_email);
     }
 
     /**
@@ -787,7 +861,7 @@ class ModuleQuiz extends \Module
         $answers = deserialize($objQuiz->answers, true);
         foreach ($answers as $answer)
         {
-            if ($answer['answer_true'] > 0)
+            if ($answer['answerTrue'] > 0)
             {
                 $trueAnswers++;
             }
@@ -803,12 +877,6 @@ class ModuleQuiz extends \Module
     {
         switch ($strError)
         {
-
-            case 'intrusionDetection':
-                unset($_POST);
-                unset($_SESSION['mod_quiz']);
-                die('Der Quellcode wurde manipuliert.');
-                break;
             case 'notEnoughQuestions':
                 unset($_POST);
                 unset($_SESSION['mod_quiz']);
@@ -833,7 +901,7 @@ class ModuleQuiz extends \Module
     /**
      * @param int|null $step
      */
-    protected function addFormActionToTemplate(int $step = null)
+    protected function addFormActionToTemplate($step = null)
     {
         if ($step === null)
         {
@@ -860,7 +928,7 @@ class ModuleQuiz extends \Module
     /**
      * @param int|null $step
      */
-    protected function redirectToStep(int $step)
+    protected function redirectToStep($step)
     {
         $strUrl = \Haste\Util\Url::removeQueryString(array('step'));
         $strRedirect = \Haste\Util\Url::addQueryString(sprintf('step=%s', $step), $strUrl);

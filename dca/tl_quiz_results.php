@@ -43,7 +43,7 @@ $GLOBALS['TL_DCA']['tl_quiz_results'] = array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
-		'question_count' => array
+		'questionCount' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
@@ -51,11 +51,11 @@ $GLOBALS['TL_DCA']['tl_quiz_results'] = array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
-		'user_rating' => array
+		'userRating' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
-		'max_rating' => array
+		'maxRating' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
@@ -63,11 +63,11 @@ $GLOBALS['TL_DCA']['tl_quiz_results'] = array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
-		'email' => array
+		'user_email' => array
 		(
 			'sql'                     => "varchar(64) COLLATE utf8_bin NOT NULL default ''"
 		),
-        'phone' => array
+        'user_phone' => array
         (
             'sql'                     => "varchar(64) COLLATE utf8_bin NOT NULL default ''"
         ),

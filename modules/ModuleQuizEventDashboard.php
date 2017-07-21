@@ -93,7 +93,7 @@ class ModuleQuizEventDashboard extends \Module
         $this->handleForm();
 
         // Add quiz select buttons to template
-        $arrPages = deserialize($this->quiz_pages, true);
+        $arrPages = deserialize($this->quizPages, true);
         $arrQuizPages = array();
         foreach ($arrPages as $pageUuid)
         {

@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = array
 	'palettes' => array
 	(
 		'__selector__' 				  => array('addImage'),
-		'default'                     => '{title_legend},question,author;{settings_legend},answerlink;{image_legend},addImage;{answers_legend},answers,answers_sort;{publish_legend},published'
+		'default'                     => '{title_legend},question,author;{settings_legend},rating,answerlink;{image_legend},addImage;{answers_legend},answers,answersSort;{publish_legend},published'
 	),
 	
 	// Subpalettes
@@ -151,6 +151,17 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = array
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
+        'rating' => array
+        (
+            'label'                   => &$GLOBALS['TL_LANG']['tl_quiz_question']['rating'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'sorting'                 => true,
+            'default'                 => 1,
+            'inputType'               => 'text',
+            'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'rgxp'=> 'natural', 'tl_class'=>'w50'),
+            'sql'                     => "varchar(255) NOT NULL default '1'"
+        ),
 		'author' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_quiz_question']['author'],
@@ -288,9 +299,9 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = array
 						'eval'      => array('filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes'], 'fieldType'=>'radio'),
 						'sql'       => "binary(16) NULL"
 					),
-		            'answer_true' => array
+		            'answerTrue' => array
 		            (
-		              'label' 		=> &$GLOBALS['TL_LANG']['tl_quiz_question']['answer_true'],
+		              'label' 		=> &$GLOBALS['TL_LANG']['tl_quiz_question']['answerTrue'],
 					  'exclude'   	=> true,
 					  'inputType'   => 'checkbox',
 					  'eval'        => array('style'=>'margin-left:7px;')
@@ -299,14 +310,13 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = array
 		   		),
 			'sql'	 => "blob NULL"
 		),
-		'answers_sort' => array
+		'answersSort' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_quiz_question']['answers_sort'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_quiz_question']['answersSort'],
 			'exclude'               => true,
-			'inputType'             => 'select',
-			'options' 				=> &$GLOBALS['TL_LANG']['tl_quiz_question']['answers_sort_select_options'],
-			'eval'                  => array('doNotCopy'=>true, 'chosen'=>true, 'includeBlankOption'=>true, 'tl_class'=>'w50'),
-			'sql'                   => "int(10) unsigned NOT NULL default '0'"
+            'inputType'             => 'checkbox',
+			'eval'                  => array('tl_class'=>'w50'),
+            'sql'                   => "char(1) NOT NULL default ''"
 		),
 		'published' => array
 		(
@@ -365,7 +375,7 @@ class tl_quiz_question extends \Backend
 		{
 			foreach($tmpAnswers as $key=>$answer)
 			{
-				$tmpAnswerCode .= $answer['answer'] . ' (' . (($answer['answer_true']) ? $answer['answer_true'] : '0') . ')<br />';
+				$tmpAnswerCode .= $answer['answer'] . ' (' . (($answer['answerTrue']) ? $answer['answerTrue'] : '0') . ')<br />';
 			}
 		}
 		

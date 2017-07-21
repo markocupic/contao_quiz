@@ -1,0 +1,21 @@
+<?php
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["title"]["0"] = "Titel";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["title"]["1"] = "Bitte geben Sie den Titel für die Kategorie ein.";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["headline"]["0"] = "Überschrift";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["headline"]["1"] = "Bitte geben Sie die Überschrift ein..";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["teaser"]["0"] = "Teaser-Text";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["teaser"]["1"] = "Geben Sie einen Einführungstext ein. Dieser erscheint vor der ersten Frage der Kategorie";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["title_legend"] = "Titel und Überschrift";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["deleteConfirm"] = "Möchten Sie wirklich die Kategorie ID %s löschen? Dieser Vorgang wird alle darunterliegenden Fragen/Antworten löschen! Weiterfahren?";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["new"]["0"] = "Neue Kategorie";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["new"]["1"] = "Neue Kategorie anlegen";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["show"]["0"] = "Kategorie Details";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["show"]["1"] = "Details der Kategorie ID %s anzeigen.";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["edit"]["0"] = "Kategorie bearbeiten";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["edit"]["1"] = "Kategorie ID %s bearbeiten";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["editheader"]["0"] = "Kategorie Einstellungen bearbeiten";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["editheader"]["1"] = "Einstellungen der Kategorie ID %s bearbeiten";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["copy"]["0"] = "Kategorie duplizieren";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["copy"]["1"] = "Kategorie ID %s duplizieren";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["delete"]["0"] = "Kategorie löschen";
+$GLOBALS["TL_LANG"]["tl_quiz_category"]["delete"]["1"] = "Kategorie ID %s löschen";

@@ -29,7 +29,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['refPromoArticle'] = array(
     'exclude'                 => true,
     'inputType'               => 'select',
     'options_callback' => array('tl_calendar_events_quiz', 'getAssignedPromoArticles'),
-    'eval'                    => array('mandatory'=>false, 'includeBlankOption' => true, 'maxlength'=>255, 'tl_class'=>'w50'),
+    'eval'                    => array('mandatory'=>true, 'includeBlankOption' => true, 'maxlength'=>255, 'tl_class'=>'w50'),
     'sql'                     => "varchar(255) NOT NULL default ''"
 );
 

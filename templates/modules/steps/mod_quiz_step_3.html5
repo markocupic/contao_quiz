@@ -8,98 +8,66 @@
 
 
 
-<div class="info">
-    <?php if ($this->question_count) echo $GLOBALS['TL_LANG']['MSC']['question_count'] . ": " . $this->question_count; ?>
-    <?php if ($this->quizLevel) { echo ($this->question_count) ? " | " : ""; echo $GLOBALS['TL_LANG']['MSC']['quiz_level'] .": " . $this->quizLevel; } ?>
-</div>
-
 <form id="tl_quiz" action="<?php echo $this->action; ?>" method="post">
     <div class="formbody">
 
         <h2 class="center"><?php echo $GLOBALS['TL_LANG']['MSC']['results_headline']; ?></h2>
         <input type="hidden" name="FORM_SUBMIT" value="tl_quiz" />
         <input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">
-        <input type="hidden" name="q_question_count" value="<?php echo $this->question_count; ?>">
-        <input type="hidden" name="question_ids" value="<?php echo $this->question_ids; ?>">
 
-        <?php if ($this->quiz): ?>
-        <?php foreach($this->quiz as $category): ?>
-        <article id="category_<?php echo $category['id']; ?>" class="category <?php echo $category['class']; ?>">
-            <h3><?php echo $category['headline']; ?></h3>
-            <?php if ($category['teaser']): ?>
-            <div class="teaser">
-                <?php echo $category['teaser']; ?>
-            </div>
-            <?php endif; ?>
-            <?php if ($category['items']): ?>
+        <article id="quizEvaluation" class="quiz-evaluation-block">
+        <?php foreach($this->quizItems as $quizItem): ?>
             <div class="quiz-results">
-                <?php foreach ($category['items'] as $question): ?>
-                <section id="question_<?php echo $question->id; ?>" class="result-item question <?php echo $question->class; ?>">
+                <section id="question_<?php echo $quizItem->id; ?>" class="result-item question quiz-cat_<?= $quizItem->pid ?> <?php echo $quizItem->class; ?>">
+                    <h6 class="question-counter">Frage <?= $quizItem->questionIndex ?>/<?= $this->questionCount ?></h6>
+                    <h4><?php echo $quizItem->question; ?></h4>
 
-                    <?php if (!$question->addBefore): ?>
-                    <h4><?php echo $question->question; ?></h4>
+                    <?php if ($quizItem->addImage): ?>
+                    <figure class="image_container<?php echo $quizItem->floatClass; ?>"<?php if ($quizItem->margin || $quizItem->float): ?> style="<?php echo trim($quizItem->margin . $quizItem->float); ?>"<?php endif; ?>>
+
+                    <?php if ($quizItem->href): ?>
+                    <a href="<?php echo $quizItem->href; ?>"<?php echo $quizItem->attributes; ?> title="<?php echo $quizItem->alt; ?>">
                     <?php endif; ?>
 
-                    <?php if ($question->addImage): ?>
-                    <figure class="image_container<?php echo $question->floatClass; ?>"<?php if ($question->margin || $question->float): ?> style="<?php echo trim($question->margin . $question->float); ?>"<?php endif; ?>>
+                    <img src="<?php echo $quizItem->src; ?>"<?php echo $quizItem->imgSize; ?> alt="<?php echo $quizItem->alt; ?>">
 
-                    <?php if ($question->href): ?>
-                    <a href="<?php echo $question->href; ?>"<?php echo $question->attributes; ?> title="<?php echo $question->alt; ?>">
-                    <?php endif; ?>
-
-                    <img src="<?php echo $question->src; ?>"<?php echo $question->imgSize; ?> alt="<?php echo $question->alt; ?>">
-
-                    <?php if ($question->href): ?>
+                    <?php if ($quizItem->href): ?>
                     </a>
                     <?php endif; ?>
 
-                    <?php if ($question->caption): ?>
-                    <figcaption class="caption" style="width:<?php echo $question->arrSize[0]; ?>px"><?php echo $question->caption; ?></figcaption>
+                    <?php if ($quizItem->caption): ?>
+                    <figcaption class="caption" style="width:<?php echo $quizItem->arrSize[0]; ?>px"><?php echo $quizItem->caption; ?></figcaption>
                     <?php endif; ?>
 
                     </figure>
                     <?php endif; ?>
 
-                    <?php if ($question->addBefore): ?>
-                    <h4><?php echo $question->question; ?></h4>
-                    <?php endif; ?>
-
-                    <?php echo $question->answers; ?>
+                    <?php echo $quizItem->answers; ?>
                 </section>
-                <?php endforeach; ?>
             </div>
-            <?php endif; ?>
-        </article>
-        <?php endforeach; ?>
-        <?php endif; ?>
 
-        <div class="submit_container">
+        <?php endforeach; ?>
+        </article>
+
+
+
+        <div class="quiz_results">
+            <p>Sie haben <?= $this->resultPercent ?> % aller Fragen korrekt beantwortet.</p>
             <?php if($this->registerUser): ?>
-                <p>Sie haben alle Fragen korrekt beantwortet. Wollen Sie sich registrieren lassen und damit an der Preisverleihung teilnehmen?</p>
-                <input type="submit" name="registerUser" value="Mit Registrierung fortfahren" class="btn btn-primary">
+            <p>Möchten Sie sich registrieren lassen und somit an der Preisverleihung teilnehmen?</p>
             <?php endif; ?>
-            <input type="submit" name="exitQuiz" value="Quiz beenden" class="btn btn-primary">
+
+            <div class="submit_container">
+                <?php if($this->registerUser): ?>
+                <input type="submit" name="registerUser" value="Mit Registrierung fortfahren" class="btn btn-primary">
+                <?php endif; ?>
+                <input type="submit" name="exitQuiz" value="Quiz beenden" class="btn btn-primary">
+            </div>
         </div>
     </div>
 </form>
 
-<div class="quiz_results">
-    <h2><?php echo $GLOBALS['TL_LANG']['MSC']['results_subline']; ?></h2>
-    <?php if ($this->result_text): ?>
-    <h6><?php echo $GLOBALS['TL_LANG']['MSC']['results_text_headline']; ?></h6>
-    <p>
-        <?php echo $this->result_text; ?>
-    </p>
-    <?php endif; ?>
-    <p>
-        <strong><?php echo sprintf($GLOBALS['TL_LANG']['MSC']['results_ratings'], $this->user_ratings, $this->max_ratings); ?> (<em><?php echo $this->result_percent; ?>%</em>)</strong>
-        <?php if ($this->quiz): ?>
-        <?php foreach($this->quiz as $category): ?>
-        <br /><?php echo $category['title']; ?>: <?php echo $category['user_ratings']; ?>/<?php echo $category['ratings']; ?> (<em><?php echo $category['user_ratings_percent']; ?>%</em>)
-        <?php endforeach; ?>
-        <?php endif; ?>
-    </p>
-</div>
+
 
 
 </div>

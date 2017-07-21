@@ -101,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_quiz_category'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,headline;teaser,teaser_result'
+		'default'                     => '{title_legend},title,headline;teaser'
 	),
 
 	// Fields
@@ -139,17 +139,9 @@ $GLOBALS['TL_DCA']['tl_quiz_category'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'eval'                    => array('rte'=>'tinyMCE', 'helpwizard'=>true),
+			'eval'                    => array('tl_class'=>'clr'),
 			'explanation'             => 'insertTags',
 			'sql'                     => "text NULL"
-		),
-		'teaser_result' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_quiz_category']['teaser_result'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('doNotCopy'=>true),
-			'sql'                     => "char(1) NOT NULL default ''"
 		)
 	)
 );
