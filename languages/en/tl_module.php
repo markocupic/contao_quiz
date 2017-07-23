@@ -20,8 +20,18 @@ $GLOBALS['TL_LANG']['tl_module']['minimumPercentScore']['0'] = 'Minimum Score Us
 $GLOBALS['TL_LANG']['tl_module']['minimumPercentScore']['1'] = 'Here you can add the minimum score the user has to reach in percents.';
 $GLOBALS['TL_LANG']['tl_module']['autoSubmitOnAnswer']['0'] = 'Auto switch.';
 $GLOBALS['TL_LANG']['tl_module']['autoSubmitOnAnswer']['1'] = 'Switch automatically to the next question when pressing an answer button.';
-
-
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep1']['0'] = 'Step 1 template';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep1']['1'] = 'Choose a template for step 1.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep2']['0'] = 'Step 2 template';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep2']['1'] = 'Choose a template for step 2.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep3']['0'] = 'Step 3 template';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep3']['1'] = 'Choose a template for step 3.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep4']['0'] = 'Step 4 template';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep4']['1'] = 'Choose a template for step 4.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep5']['0'] = 'Step 5 template';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep5']['1'] = 'Choose a template for step 5.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep6']['0'] = 'Step 6 template';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep6']['1'] = 'Choose a template for step 6.';
 
 
 // References

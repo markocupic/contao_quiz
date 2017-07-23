@@ -1,5 +1,5 @@
 <!-- indexer::stop -->
-<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?> data-contao-quiz="<?= $this->moduleSettings ?>">
+<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
 
 <?php if ($this->headline): ?>
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
@@ -69,13 +69,13 @@
             <button class="btn btn-next-slide">N&auml;chste</button>
         </div>
 
-        <div class="submit_container hidden">
-            <input type="submit" class="submit btn btn-primary" onclick="" value="<?php echo $this->submit; ?>"/>
-        </div>
     </div>
 </form>
 
 
+<!-- Slick Slider -->
+<?php $GLOBALS['TL_CSS'][] = 'system/modules/contao_quiz/assets/slick/slick.css' ?>
+<script src="system/modules/contao_quiz/assets/slick/slick.js"></script>
 
 <script src="system/modules/contao_quiz/assets/js/ContaoQuizStep2.js"></script>
 <script>
@@ -84,7 +84,10 @@
             $(".mod_quiz.step_2").contaoQuizStep2({
                 requestToken: '{{REQUEST_TOKEN}}',
                 sliderContainer: '.quiz-slider',
-                sliderItem: '.quiz-slider-item'
+                sliderItem: '.quiz-slider-item',
+                buttonPrevSlide: '.btn-prev-slide',
+                buttonNextSlide: '.btn-next-slide',
+                buttonAnswer: '.button-answer'
             });
         });
     })(jQuery);

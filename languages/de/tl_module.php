@@ -19,7 +19,18 @@ $GLOBALS['TL_LANG']['tl_module']['minimumPercentScore']['0'] = 'Minimum Score, d
 $GLOBALS['TL_LANG']['tl_module']['minimumPercentScore']['1'] = 'Geben Sie einen Minimalwert in Prozent an.';
 $GLOBALS['TL_LANG']['tl_module']['answersSort']['0'] = 'Antworten sortieren';
 $GLOBALS['TL_LANG']['tl_module']['answersSort']['1'] = 'Geben Sie an, ob die Antworten aus der Liste zufällig sortiert werden sollen. Diese Einstellung kann in der Quizfrage überschrieben werden.';
-
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep1']['0'] = 'Template f&uuml;r Step 1';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep1']['1'] = 'W&auml;hlen Sie ein Template f&uuml;r Step 1 aus.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep2']['0'] = 'Template f&uuml;r Step 2';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep2']['1'] = 'W&auml;hlen Sie ein Template f&uuml;r Step 2 aus.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep3']['0'] = 'Template f&uuml;r Step 3';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep3']['1'] = 'W&auml;hlen Sie ein Template f&uuml;r Step 3 aus.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep4']['0'] = 'Template f&uuml;r Step 4';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep4']['1'] = 'W&auml;hlen Sie ein Template f&uuml;r Step 4 aus.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep5']['0'] = 'Template f&uuml;r Step 5';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep5']['1'] = 'W&auml;hlen Sie ein Template f&uuml;r Step 5 aus.';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep6']['0'] = 'Template f&uuml;r Step 6';
+$GLOBALS['TL_LANG']['tl_module']['quizTplStep6']['1'] = 'W&auml;hlen Sie ein Template f&uuml;r Step 6 aus.';
 
 
 // References

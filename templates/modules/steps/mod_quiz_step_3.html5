@@ -1,4 +1,7 @@
+<?php $GLOBALS['TL_CSS'][] = 'system/modules/contao_quiz/assets/circliful/css/jquery.circliful.css'; ?>
+<?php $GLOBALS['TL_CSS'][] = 'system/modules/contao_quiz/assets/circliful/css/material-design-iconic-font.min.css'; ?>
 
+<script src="system/modules/contao_quiz/assets/circliful/js/jquery.circliful.min.js"></script>
 <!-- indexer::stop -->
 <div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
 
@@ -52,6 +55,7 @@
 
 
         <div class="quiz_results">
+            <div id="resultCirclePie" style="width: 200px;text-align-center"></div>
             <p>Sie haben <?= $this->resultPercent ?> % aller Fragen korrekt beantwortet.</p>
             <?php if($this->registerUser): ?>
             <p>Möchten Sie sich registrieren lassen und somit an der Preisverleihung teilnehmen?</p>
@@ -64,6 +68,23 @@
                 <input type="submit" name="exitQuiz" value="Quiz beenden" class="btn btn-primary">
             </div>
         </div>
+        <script>
+        $( document ).ready(function() { // 6,32 5,38 2,34
+            $("#resultCirclePie").circliful({
+                animation: 1,
+                animationStep: 5,
+                foregroundBorderWidth: 15,
+                backgroundBorderWidth: 15,
+                percent: <?= $this->resultPercent ?>,
+                textSize: 22,
+                textStyle: 'font-size: 12px;',
+                textColor: '#666',
+                multiPercentage: 1,
+                percentages: [10, 20, 30]
+            });
+
+        });
+        </script>
     </div>
 </form>
 

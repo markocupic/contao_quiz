@@ -11,7 +11,7 @@
 /**
  * Add palettes to tl_module
  */
-$GLOBALS['TL_DCA']['tl_module']['palettes']['quiz'] = '{title_legend},name,headline,type;{config_legend},quizCategories,quizTeaser,questionCount,questionSort,answersSort,autoSubmitOnAnswer;{results_legend:hide},saveResults;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['quiz'] = '{title_legend},name,headline,type;{config_legend},quizCategories,quizTeaser,questionCount,questionSort,answersSort;{results_legend:hide},saveResults;{template_legend},quizTplStep1,quizTplStep2,quizTplStep3,quizTplStep4,quizTplStep5,quizTplStep6;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['quizEventDashboard'] = '{title_legend},name,headline,type;{quiz_pages_legend},quizPages;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'saveResults';
@@ -94,15 +94,23 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['minimumPercentScore'] = array
     'eval' => array('submitOnChange'=>true, 'tl_class' => 'w50', 'maxlength' => 3),
     'sql' => "varchar(3) NOT NULL default '100'"
 );
+for($i=1;$i<7;$i++)
+{
+    $GLOBALS['TL_DCA']['tl_module']['fields']['quizTplStep' . $i] = array
+    (
+        'label'             => &$GLOBALS['TL_LANG']['tl_module']['quizTplStep' . $i],
+        'exclude'           => true,
+        'inputType'         => 'select',
+        'options_callback'	=> array('tl_module_quiz', 'getQuizTemplatesStep' . $i),
+        'eval'              => array('tl_class'=>'w50'),
+        'sql'               => "varchar(64) NOT NULL default ''"
+    );
+}
 
-$GLOBALS['TL_DCA']['tl_module']['fields']['autoSubmitOnAnswer'] = array
-(
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['autoSubmitOnAnswer'],
-    'exclude' => true,
-    'inputType' => 'checkbox',
-    'eval' => array('doNotCopy' => true, 'tl_class' => 'clr'),
-    'sql' => "char(1) NOT NULL default ''"
-);
+
+
+
+
 
 /**
  * Class tl_module_quiz
@@ -118,9 +126,53 @@ class tl_module_quiz extends \Backend
      * Return all quiz templates as array
      * @return array
      */
-    public function getQuizTemplates()
+    public function getQuizTemplatesStep1()
     {
-        return $this->getTemplateGroup('mod_quiz');
+        return $this->getTemplateGroup('mod_quiz_step_1');
+    }
+
+    /**
+     * Return all quiz templates as array
+     * @return array
+     */
+    public function getQuizTemplatesStep2()
+    {
+        return $this->getTemplateGroup('mod_quiz_step_2');
+    }
+    /**
+     * Return all quiz templates as array
+     * @return array
+     */
+    public function getQuizTemplatesStep3()
+    {
+        return $this->getTemplateGroup('mod_quiz_step_3');
+    }
+
+    /**
+     * Return all quiz templates as array
+     * @return array
+     */
+    public function getQuizTemplatesStep4()
+    {
+        return $this->getTemplateGroup('mod_quiz_step_4');
+    }
+
+    /**
+     * Return all quiz templates as array
+     * @return array
+     */
+    public function getQuizTemplatesStep5()
+    {
+        return $this->getTemplateGroup('mod_quiz_step_5');
+    }
+
+    /**
+     * Return all quiz templates as array
+     * @return array
+     */
+    public function getQuizTemplatesStep6()
+    {
+        return $this->getTemplateGroup('mod_quiz_step_6');
     }
 
 

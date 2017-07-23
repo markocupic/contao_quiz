@@ -53,7 +53,7 @@ class ModuleQuiz extends \Module
      * Template
      * @var string
      */
-    protected $strTemplate = 'mod_quiz_step_1';
+    protected $strTemplate = '';
 
     /**
      * Set the session key
@@ -132,7 +132,7 @@ class ModuleQuiz extends \Module
             $this->step = \Input::get('step');
 
             // Set the template
-            $this->strTemplate = 'mod_quiz_step_' . \Input::get('step');
+            $this->strTemplate = ($this->{'quizTplStep' . $this->step} != '') ? $this->{'quizTplStep' . $this->step} : 'mod_quiz_step_' . $this->step;
         }
 
         // Store post data in the session
@@ -169,9 +169,6 @@ class ModuleQuiz extends \Module
 
         // Add the referenced Event to the template
         $this->Template->refEvent = $this->refEvent;
-
-        // Add module settings as JSON
-        $this->Template->moduleSettings = base64_encode($this->moduleSettingsToJson());
 
 
         switch ($this->step)
@@ -422,6 +419,8 @@ class ModuleQuiz extends \Module
                 }
                 // Add the button
                 $htmlCode .= '<button type="button" aria-pressed="false" id="button_answer_' . $arrQuestion['questionId'] . '_' . $answerKey . '" data-answer="' . $objQuizItem->id . '_' . $answerKey . '" class="btn btn-info btn-lg button-answer">' . $arrAnswer['answer'] . '</button>';
+                $htmlCode .= '</div>';
+
             }
 
 
@@ -939,21 +938,6 @@ class ModuleQuiz extends \Module
 
     }
 
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    protected function moduleSettingsToJson()
-    {
-        $objModule = \ModuleModel::findByPk($this->id);
-        if ($objModule === null)
-        {
-            throw new \Exception('Could not find module with ID ' . $this->id);
-        }
-        $arrSettings = array();
-        $arrSettings['autoSubmitOnAnswer'] = $objModule->autoSubmitOnAnswer;
-        return json_encode($arrSettings);
-    }
 
     /**
      *
@@ -964,23 +948,29 @@ class ModuleQuiz extends \Module
         if (\Input::get('send_answer') == 'true' && \Input::post('data_answer') != '' && $this->validateSessionId())
         {
             $arrAnswer = explode('_', \Input::post('data_answer'));
+            $questionId = $arrAnswer[0];
+            $answerKey = $arrAnswer[1];
             $arrSession = $this->getFromSession('questions');
             $json = array();
             // Hacking prevention: There can be only one request per question
-            if ($arrSession[$arrAnswer[0]]['answered'] != true)
+            if ($arrSession[$questionId]['answered'] != true)
             {
-                $eval = \QuizQuestionModel::evalAnswer($arrAnswer[0], $arrAnswer[1]) ? 'true' : 'false';
-                $arrSession[$arrAnswer[0]]['answered'] = 'true';
-                $arrSession[$arrAnswer[0]]['eval'] = $eval;
-                $arrSession[$arrAnswer[0]]['userAnswer'] = $arrAnswer[1];
-                $arrSession[$arrAnswer[0]]['rightAnswer'] = \QuizQuestionModel::getAnswer($arrAnswer[0]);
-                $arrSession[$arrAnswer[0]]['arrAnswers'][$arrAnswer[1]]['checkedByUser'] = 'true';
+                $eval = \QuizQuestionModel::evalAnswer($questionId,  $answerKey) ? 'true' : 'false';
+                $arrSession[$questionId]['answered'] = 'true';
+                $arrSession[$questionId]['eval'] = $eval;
+                $arrSession[$questionId]['userAnswer'] =  $answerKey;
+                $arrSession[$questionId]['rightAnswer'] = \QuizQuestionModel::getAnswer($questionId);
+                $arrSession[$questionId]['arrAnswers'][ $answerKey]['checkedByUser'] = 'true';
 
                 $this->addToSession('questions', $arrSession);
 
                 $json['eval'] = $eval;
-                $json['userAnswer'] = $arrAnswer[1];
-                $json['rightAnswer'] = \QuizQuestionModel::getAnswer($arrAnswer[0]);
+                $json['userAnswer'] =  $answerKey;
+                $json['rightAnswer'] = \QuizQuestionModel::getAnswer($questionId);
+                \QuizAnswerStatsModel::addClick($questionId, $answerKey);
+                $json['equalClicks'] = \QuizAnswerStatsModel::getClicks($questionId, $answerKey);
+                $json['clickPrctDistribution'] = \QuizAnswerStatsModel::getClickDistributionInPercentage($questionId);
+
             }
             else
             {

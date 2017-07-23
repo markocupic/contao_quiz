@@ -32,6 +32,8 @@ ClassLoader::addClasses(array
 	'Contao\QuizCategoryModel'			=> 'system/modules/contao_quiz/models/QuizCategoryModel.php',
 	'Contao\QuizQuestionModel'			=> 'system/modules/contao_quiz/models/QuizQuestionModel.php',
     'Contao\QuizResultModel'			=> 'system/modules/contao_quiz/models/QuizResultModel.php',
+    'Contao\QuizAnswerStatsModel'			=> 'system/modules/contao_quiz/models/QuizAnswerStatsModel.php',
+
 ));
 
 

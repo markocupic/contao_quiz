@@ -1,0 +1,143 @@
+array (
+  'stepsTraversed' =>
+  array (
+    'step_1' => true,
+    'step_2' => true,
+    'step_3' => true,
+    'step_4' => true,
+    'step_5' => true,
+    'step_6' => true,
+  ),
+  'quiz_start' => 1500824085,
+  'question_ids' =>
+  array (
+    0 => '5',
+    1 => '7',
+  ),
+  'questions' =>
+  array (
+    5 =>
+    array (
+      'answered' => 'true',
+      'userAnswer' => '1',
+      'answer' => '',
+      'eval' => 'true',
+      'questionId' => '5',
+      'questionText' => 'Wie heisst der Französische Präsident?',
+      'arrAnswers' =>
+      array (
+        0 =>
+        array (
+          'answer' => 'Jaques Chirac',
+          'singleSRC' => '',
+          'answerTrue' => NULL,
+        ),
+        1 =>
+        array (
+          'answer' => 'Emmanuel Macron',
+          'singleSRC' => '',
+          'answerTrue' => 'true',
+          'checkedByUser' => 'true',
+        ),
+        2 =>
+        array (
+          'answer' => 'Louis de Funes',
+          'singleSRC' => '',
+          'answerTrue' => NULL,
+        ),
+      ),
+      'arrAnswersOrder' =>
+      array (
+        0 => 0,
+        1 => 2,
+        2 => 1,
+      ),
+      'rightAnswer' => 1,
+    ),
+    7 =>
+    array (
+      'answered' => 'true',
+      'userAnswer' => '0',
+      'answer' => '',
+      'eval' => 'false',
+      'questionId' => '7',
+      'questionText' => 'Wie heisst der amtierende F1 Weltmeister?',
+      'arrAnswers' =>
+      array (
+        0 =>
+        array (
+          'answer' => 'Keke Rossberg',
+          'singleSRC' => '',
+          'answerTrue' => NULL,
+          'checkedByUser' => 'true',
+        ),
+        1 =>
+        array (
+          'answer' => 'Nico Rossberg',
+          'singleSRC' => '',
+          'answerTrue' => 'true',
+        ),
+        2 =>
+        array (
+          'answer' => 'Lewis Hamilton',
+          'singleSRC' => '',
+          'answerTrue' => NULL,
+        ),
+      ),
+      'arrAnswersOrder' =>
+      array (
+        0 => 1,
+        1 => 0,
+        2 => 2,
+      ),
+      'rightAnswer' => 1,
+    ),
+  ),
+  'sessionId' => 'e2389b661081f9ba09f3b18e7dc8484d',
+  'form_data' =>
+  array (
+    'FORM_SUBMIT' => 'tl_quiz',
+    'REQUEST_TOKEN' => 'f37b2661658627537533805d69020468',
+    'registerUser' => 'Mit Registrierung fortfahren',
+    'eventToken' => '1376514062de562f2135715c2bc83f5b8dc82b0b4623',
+    'sessionId' => 'e2389b661081f9ba09f3b18e7dc8484d',
+    'step' => '5',
+    'user_email' => 'm.cupic@gmx.ch',
+    'user_phone' => '419214020',
+    'c12fcaa4209a0dce54d6dd98a789431f1' => '4',
+    'submit' => 'Registrierung abschliessen',
+  ),
+  'arr_result' =>
+  array (
+    'userRatings' => 1,
+    'maxRating' => 2,
+    'rating_percent' => '50',
+  ),
+  'rating' =>
+  array (
+    'pid' => '323',
+    'tstamp' => 1500824558,
+    'questionCount' => '2',
+    'quiztime' => 473,
+    'userRating' => 1,
+    'maxRating' => 2,
+    'rating_percent' => '50',
+    'ip' => '83.77.58.0',
+  ),
+  'quizUserSaveToDatabase' => 'true',
+  'quizUserData' =>
+  array (
+    'id' => '24',
+    'pid' => '323',
+    'tstamp' => '1500824558',
+    'quiztime' => '473',
+    'rating_percent' => '50',
+    'ip' => '83.77.58.0',
+    'refEventId' => '4623',
+    'questionCount' => '2',
+    'userRating' => '1',
+    'maxRating' => '2',
+    'user_email' => 'm.cupic@gmx.ch',
+    'user_phone' => '419214020',
+  ),
+)
