@@ -1,6 +1,5 @@
-
 <!-- indexer::stop -->
-<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+<div class="<?php echo $this->class; ?> block step_<?= $this->step ?>"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?> data-contao-quiz="<?= $this->moduleSettings ?>">
 
 <?php if ($this->headline): ?>
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
@@ -12,7 +11,7 @@
         <?php if ($this->show_results): ?>
         <h2 class="center"><?php echo $GLOBALS['TL_LANG']['MSC']['results_headline']; ?></h2>
         <?php endif; ?>
-        <input type="hidden" name="FORM_SUBMIT" value="tl_quiz" />
+        <input type="hidden" name="FORM_SUBMIT" value="tl_quiz"/>
         <input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">
 
 
@@ -20,37 +19,38 @@
             <div class="quiz-slider">
                 <?php foreach($this->quizItems as $quizItem): ?>
 
-                        <section id="question_<?php echo $quizItem->id; ?>-cat_<?= $quizItem->pid ?>" class="slide-item question quiz-cat_<?= $quizItem->pid ?> <?php echo $quizItem->class; ?>">
+                <section id="question_<?php echo $quizItem->id; ?>-cat_<?= $quizItem->pid ?>" class="quiz-slider-item question quiz-cat_<?= $quizItem->pid ?> <?php echo $quizItem->class; ?>">
 
-                            <h6 class="question-counter">Frage <?= $quizItem->questionIndex ?>/<?= $this->questionCount ?></h6>
-                            <h5 class="quiz-category">Kategorie:<?php echo $quizItem->parentHeadline; ?></h5>
+                    <h6 class="question-counter">Frage <?= $quizItem->questionIndex ?>/<?= $this->questionCount ?></h6>
+                    <h5 class="quiz-category">Kategorie:<?php echo $quizItem->parentHeadline; ?></h5>
 
-                            <h3><?php echo $quizItem->question; ?></h3>
+                    <h3><?php echo $quizItem->question; ?></h3>
 
-                            <?php if ($quizItem->addImage): ?>
-                            <figure class="image_container<?php echo $quizItem->floatClass; ?>"<?php if ($quizItem->margin || $quizItem->float): ?> style="<?php echo trim($quizItem->margin . $quizItem->float); ?>"<?php endif; ?>>
+                    <?php if ($quizItem->addImage): ?>
+                    <figure class="image_container<?php echo $quizItem->floatClass; ?>"
+                    <?php if ($quizItem->margin || $quizItem->float): ?> style="<?php echo trim($quizItem->margin . $quizItem->float); ?>"<?php endif; ?>>
 
-                            <?php if ($quizItem->href): ?>
-                            <a href="<?php echo $quizItem->href; ?>"<?php echo $quizItem->attributes; ?> title="<?php echo $quizItem->alt; ?>">
-                            <?php endif; ?>
+                    <?php if ($quizItem->href): ?>
+                    <a href="<?php echo $quizItem->href; ?>"<?php echo $quizItem->attributes; ?> title="<?php echo $quizItem->alt; ?>">
+                    <?php endif; ?>
 
-                            <img src="<?php echo $quizItem->src; ?>"<?php echo $quizItem->imgSize; ?> alt="<?php echo $quizItem->alt; ?>">
+                    <img src="<?php echo $quizItem->src; ?>"<?php echo $quizItem->imgSize; ?> alt="<?php echo $quizItem->alt; ?>">
 
-                            <?php if ($quizItem->href): ?>
-                            </a>
-                            <?php endif; ?>
+                    <?php if ($quizItem->href): ?>
+                    </a>
+                    <?php endif; ?>
 
-                            <?php if ($quizItem->caption): ?>
-                            <figcaption class="caption" style="width:<?php echo $quizItem->arrSize[0]; ?>px"><?php echo $quizItem->caption; ?></figcaption>
-                            <?php endif; ?>
+                    <?php if ($quizItem->caption): ?>
+                    <figcaption class="caption" style="width:<?php echo $quizItem->arrSize[0]; ?>px"><?php echo $quizItem->caption; ?></figcaption>
+                    <?php endif; ?>
 
-                            </figure>
-                            <?php endif; ?>
+                    </figure>
+                    <?php endif; ?>
 
-                            <!-- Display the buttons -->
-                            <?php echo $quizItem->answers; ?>
+                    <!-- Display the buttons -->
+                    <?php echo $quizItem->answers; ?>
 
-                        </section>
+                </section>
                 <?php endforeach; ?>
             </div>
 
@@ -58,9 +58,9 @@
 
 
         <div class="counter-box">
-        <?php for($i=1; $i<= $this->questionCount; $i++): ?>
+            <?php for($i=1; $i<= $this->questionCount; $i++): ?>
             <div id="counterItem_<?= $i ?>" class="counter-item"><?= $i ?></div>
-        <?php endfor; ?>
+            <?php endfor; ?>
         </div>
 
 
@@ -70,138 +70,25 @@
         </div>
 
         <div class="submit_container hidden">
-            <input type="submit" class="submit btn btn-primary" onclick="" value="<?php echo $this->submit; ?>" />
+            <input type="submit" class="submit btn btn-primary" onclick="" value="<?php echo $this->submit; ?>"/>
         </div>
     </div>
 </form>
 
 
+
+<script src="system/modules/contao_quiz/assets/js/ContaoQuizStep2.js"></script>
 <script>
-    (function($) {
-        $(document).ready(function() {
-            var submitContainer = $('.mod_quiz .submit_container');
-
-            // Show submit button from the beginning, if there is only one slide
-            // Place oninit event before you instantiate the slider
-            $('.quiz-slider').on('init', function(event, slick){
-                controlNavBtnVisibiliy(slick, submitContainer);
-                if(slick.slideCount == 1){
-                    $(submitContainer).removeClass('hidden');
-                }
-            });
-
-            // Instantiate the slider
-            $('.quiz-slider').slick({
-                slide: '.slide-item',
-                infinite: false,
-                prevArrow: '',
-                nextArrow: '',
-                adaptiveHeight: true,
-                accessibility: false,
-                arrows: false,
-                draggable:false
-            });
-
-
-
-
-            // Event: On after slide change
-            $('.quiz-slider').on('afterChange', function(event, slick, currentSlide){
-                controlNavBtnVisibiliy(slick, submitContainer);
-            });
-
-            // Nav buttons
-            $('.btn-prev-slide').click(function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                $('.quiz-slider').slick('slickPrev');
-            });
-
-            $('.btn-next-slide').click(function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                $('.quiz-slider').slick('slickNext');
-
-            });
-
-            /**
-            $('.mod_quiz .submit_container').click(function(e){
-                if (confirm('Wollen Sie das Quiz wirklich absenden?')) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-             **/
-
-            // Button handling
-            $('.button-answer').click(function(e){
-                var elButton = $(this);
-                // Radio handling
-                if($(elButton).attr('data-input-type') == 'radio')
-                {
-                   var radioId = $(elButton).attr('data-radio-id');
-                   var radio = $('#' + radioId);
-                   radio.trigger('click');
-                   $(elButton).closest('.question').find('.button-answer').each(function(){
-                       $(this).attr('aria-pressed', 'false');
-                       $(this).removeClass('active');
-                   });
-                   window.setTimeout(function(){
-                       elButton.attr('aria-pressed', 'true');
-                       elButton.addClass('active');
-                   },50);
-
-                    $(this).closest('.slide-item').addClass('question-solved');
-                    if( $('.slide-item').length == $('.slide-item.question-solved').length)
-                    {
-                        $(submitContainer).removeClass('hidden')
-                    }
-                    var currentSlide = $('.slick-slider').slick('slickCurrentSlide');
-                    $('.counter-item:eq( ' + (currentSlide) +' )').addClass('passed');
-
-
-                    // Go to the next slide when the answer button was pressed!!!!
-                    $('.btn-next-slide').trigger('click');
-
-                }
-
-                // Checkbox handling
-                if($(elButton).attr('data-input-type') == 'checkbox')
-                {
-                    var checkboxId = $(elButton).attr('data-radio-id');
-                    var checkbox = $('#' + checkboxId);
-                    checkbox.trigger('click');
-                    if(elButton.hasClass('active'))
-                    {
-                        elButton.attr('aria-pressed', 'false');
-                        elButton.removeClass('active');
-                    }else{
-                        elButton.attr('aria-pressed', 'true');
-                        elButton.addClass('active');
-                    }
-                }
+    (function ($) {
+        $(document).ready(function () {
+            $(".mod_quiz.step_2").contaoQuizStep2({
+                requestToken: '{{REQUEST_TOKEN}}',
+                sliderContainer: '.quiz-slider',
+                sliderItem: '.quiz-slider-item'
             });
         });
-        function controlNavBtnVisibiliy(slick, submitContainer)
-        {
-            if(slick.slideCount == slick.currentSlide + 1){
-                $('.btn-next-slide').addClass('disabled');
-            }else{
-                $(submitContainer).addClass('hidden');
-                $('.btn-next-slide').removeClass('disabled');
-            }
-            if(slick.currentSlide == 0){
-                $('.btn-prev-slide').addClass('disabled');
-            }else{
-                $('.btn-prev-slide').removeClass('disabled');
-            }
-        }
-
-
-
-
     })(jQuery);
 </script>
+
 </div>
 <!-- indexer::continue -->

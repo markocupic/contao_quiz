@@ -6,7 +6,7 @@
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif; ?>
 
-
+<?php //die(serialize($_SESSION['mod_quiz'])); ?>
 
 <form id="tl_quiz" action="<?php echo $this->action; ?>" method="post">
     <div class="formbody">

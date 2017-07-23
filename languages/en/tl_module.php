@@ -18,6 +18,10 @@ $GLOBALS['TL_LANG']['tl_module']['saveResults']['0'] = 'Save results to the data
 $GLOBALS['TL_LANG']['tl_module']['saveResults']['1'] = 'You can save the quiz results to the database for further usage.';
 $GLOBALS['TL_LANG']['tl_module']['minimumPercentScore']['0'] = 'Minimum Score User has to reach in percent';
 $GLOBALS['TL_LANG']['tl_module']['minimumPercentScore']['1'] = 'Here you can add the minimum score the user has to reach in percents.';
+$GLOBALS['TL_LANG']['tl_module']['autoSubmitOnAnswer']['0'] = 'Auto switch.';
+$GLOBALS['TL_LANG']['tl_module']['autoSubmitOnAnswer']['1'] = 'Switch automatically to the next question when pressing an answer button.';
+
+
 
 
 // References

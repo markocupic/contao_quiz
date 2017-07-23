@@ -153,4 +153,66 @@ class QuizQuestionModel extends \Model
 
         return static::countBy($arrColumns, null);
     }
+
+    /**
+ * @param $quizId
+ * @param $answerId
+ * @return bool
+ */
+    public static function evalAnswer($quizId, $answerId)
+    {
+        $objQuiz = static::findByPk($quizId);
+        if ($objQuiz !== null)
+        {
+            $arrAnswers = deserialize($objQuiz->answers, true);
+            if ($arrAnswers[$answerId]['answerTrue'] == '1')
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $quizId
+     * @return int|string
+     */
+    public static function getAnswer($quizId)
+    {
+        $objQuiz = static::findByPk($quizId);
+        if ($objQuiz !== null)
+        {
+            $arrAnswers = deserialize($objQuiz->answers, true);
+            foreach($arrAnswers as $k => $arrAnswer)
+            {
+                if($arrAnswer['answerTrue'] == '1')
+                {
+                    return $k;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $quizId
+     * @param string $shuffle
+     * @return bool|mixed
+     */
+    public function getAnswers($quizId)
+    {
+        $objQuiz = static::findByPk($quizId);
+        if ($objQuiz !== null)
+        {
+            $arrAnswers = deserialize($objQuiz->answers, true);
+            $arrAnswers = array_map(function($el){
+                if($el['singleSRC'] != '')
+                {
+                    $el['singleSRC'] = \StringUtil::binToUuid($el['singleSRC']);
+                }
+                $el['answerTrue']  = $el['answerTrue'] == 1 ? 'true' : null;
+                return $el;
+            },$arrAnswers);
+            return $arrAnswers;
+        }
+    }
 }

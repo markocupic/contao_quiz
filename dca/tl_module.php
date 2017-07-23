@@ -11,7 +11,7 @@
 /**
  * Add palettes to tl_module
  */
-$GLOBALS['TL_DCA']['tl_module']['palettes']['quiz'] = '{title_legend},name,headline,type;{config_legend},quizCategories,quizTeaser,questionCount,questionSort,answersSort;{results_legend:hide},saveResults;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['quiz'] = '{title_legend},name,headline,type;{config_legend},quizCategories,quizTeaser,questionCount,questionSort,answersSort,autoSubmitOnAnswer;{results_legend:hide},saveResults;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['quizEventDashboard'] = '{title_legend},name,headline,type;{quiz_pages_legend},quizPages;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'saveResults';
@@ -93,6 +93,15 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['minimumPercentScore'] = array
     'default' => 100,
     'eval' => array('submitOnChange'=>true, 'tl_class' => 'w50', 'maxlength' => 3),
     'sql' => "varchar(3) NOT NULL default '100'"
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['autoSubmitOnAnswer'] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['tl_module']['autoSubmitOnAnswer'],
+    'exclude' => true,
+    'inputType' => 'checkbox',
+    'eval' => array('doNotCopy' => true, 'tl_class' => 'clr'),
+    'sql' => "char(1) NOT NULL default ''"
 );
 
 /**

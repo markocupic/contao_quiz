@@ -279,6 +279,7 @@ $GLOBALS['TL_DCA']['tl_quiz_question'] = array
 		    'exclude'   => true,
 			'search'    => true,
 			'inputType' => 'multiColumnWizard',
+		    'save_callback' => array(array('tl_quiz_question','saveCallbackAnswer')),
 		    'eval'      => array
 				(
 		        'style'=>'width:100%;',
@@ -358,6 +359,30 @@ class tl_quiz_question extends \Backend
 	public function checkPermission()
 	{
 	}
+
+	public function saveCallbackAnswer($value)
+    {
+        $arrAnswers = deserialize($value,true);
+        $count=0;
+        $trueAnswers=0;
+        foreach($arrAnswers as $arrAnswer)
+        {
+            $count++;
+            if($arrAnswer['answerTrue'] == '1')
+            {
+                $trueAnswers++;
+            }
+        }
+        if($count > 0 && $trueAnswers < 1)
+        {
+            throw new Exception('At least 1 answer has to be marked as "true"!');
+        }
+        if($count > 0 && $trueAnswers > 1)
+        {
+            throw new Exception('Only 1 answer can be marked as "true"!');
+        }
+        return $value;
+    }
 
 	/**
 	 * Add the type of input field

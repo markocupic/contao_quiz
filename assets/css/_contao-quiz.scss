@@ -1,0 +1,119 @@
+#main {
+  .mod_quiz.step_2 {
+    .answer{
+      input,label{
+        display: none;
+        visibility: hidden;
+        position: absolute;
+        left: -99999px;
+
+      }
+    }
+    .button-answer {
+      display: block;
+      margin: 1rem 0;
+      width: 400px;
+      border: none !important;
+      &:focus {
+        box-shadow: none !important;
+      }
+
+      &.active {
+        background-color: red;
+        border-color: red;
+      }
+    }
+    .slider-nav-btn-container {
+      margin-top: 3rem;
+      border-top: 1px solid $gray-lighter;
+      padding-top: 1rem;
+      // Do not show prev and next button,
+      // because the slider goes automatically to the next slide, when an answer button is pressed
+      display:none;
+
+      button {
+        margin-right: 2rem;
+        @extend .btn-success;
+      }
+      button.disabled {
+        @extend .btn-secondary;
+      }
+    }
+
+
+    .counter-box{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      .counter-item{
+        margin-right: 5px;
+        border: 1px solid #999;
+        line-height: 30px;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        &.passed{
+          background-color: green;
+          color: #fff;
+          border-color: green;
+        }
+      }
+    }
+
+  }
+
+  .mod_quiz.step_3 {
+    .result-item {
+      margin: 1rem 0 4rem 0;
+      .correct-answer {
+        color: green;
+      }
+      .incorrect-answer {
+        color: red;
+      }
+      .users-choice {
+        &:before {
+          font-family: FontAwesome;
+          content: "\f096";
+        }
+      }
+      .users-choice.checked {
+        &:before {
+          content: "\f046";
+        }
+      }
+    }
+  }
+
+  .mod_quiz {
+    background-color: #fff;
+    padding: 1rem;
+
+    .formbody {
+      max-width: 100%;
+      width: 100%;
+      .image_container {
+        img {
+          width: auto;
+        }
+      }
+    }
+    .submit_container {
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+
+
+    .submit_container {
+      &.hidden {
+        visibility: hidden !important;
+      }
+    }
+
+  }
+  input.submit {
+    @extend .btn;
+    @extend .btn-primary;
+  }
+}
