@@ -1,0 +1,12 @@
+<div id="answer_<?= $this->id ?>" class="<?= $this->class ?>">
+    <?php if($this->addImage): ?>
+    <figure class="image_container">
+        {{image::' . $this->singleSRC . '?width=100&height=100&rel=lightbox&alt=' . $this->alt . '}}
+    </figure>
+    <?php endif; ?>
+    <span class="users-choice<?= $this->checked ?>"></span>
+    <label for="check_answer_<?= $this->id ?>"> <?= $this->labelText ?></label>
+    <?php if($this->resultComment): ?>
+        <span class="resultcomment"><?= $this->resultComment ?></span>
+    <?php endif; ?>
+</div>

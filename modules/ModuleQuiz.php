@@ -330,7 +330,7 @@ class ModuleQuiz extends \Module
 
                     // Add User Data to Session
                     $this->addToSession('quizUserSaveToDatabase', 'true');
-                    $this->addToSession('quizUserData',  $objResult->row());
+                    $this->addToSession('quizUserData', $objResult->row());
 
                     $this->redirectToStep(6);
                 }
@@ -364,6 +364,7 @@ class ModuleQuiz extends \Module
      */
     protected function addQuizQuestionsToTemplate()
     {
+        global $objPage;
         // Get questions from session
         $arrQuestions = $this->getFromSession('questions');
         if (!is_array($arrQuestions))
@@ -482,6 +483,7 @@ class ModuleQuiz extends \Module
      */
     protected function addQuizResultsToTemplate()
     {
+        global $objPage;
         // Get questions from session
         $arrQuestions = $this->getFromSession('questions');
         if (!is_array($arrQuestions))
@@ -495,13 +497,13 @@ class ModuleQuiz extends \Module
         }
 
         $arrQuizItems = array();
+        $tmpMaxRatings = 0;
         $i = 0;
 
         // Create HTML-Code for the Questions and answers
         // Traverse each question
         foreach ($arrQuestions as $arrQuestion)
         {
-            $htmlCode = '';
 
             $objQuizItem = \QuizQuestionModel::findByPk($arrQuestion['questionId']);
             if ($objQuizItem === null)
@@ -515,30 +517,35 @@ class ModuleQuiz extends \Module
             {
                 $objQuizItem->rating = 1;
             }
-
+            $tmpUserRatings = 0;
             $tmpMaxRatings += $objQuizItem->rating;
-
-            $htmlCode = '';
-            $answerIsCorrect = true;
+            $blnAnswerIsCorrect = true;
+            $strHtmlQuizItem = '';
 
             foreach ($arrQuestion['arrAnswersOrder'] as $answerKey)
             {
                 $arrAnswer = $arrQuestion['arrAnswers'][$answerKey];
-                $tmpAnswerPic = '';
+
+                // Generate the partial template for each answer (button)
+                $objPartial = new \FrontendTemplate('evaluation_partial');
+                $objPartial->id = $objQuizItem->id . '_' . $answerKey;
+                $objPartial->quizId = $objQuizItem->id;
+                $objPartial->answerKey = $answerKey;
+                $objPartial->checked = $arrAnswer['checkedByUser'] ? ' checked' : '';
+                $objPartial->labelText = $arrAnswer['answer'];
+
+
                 // Add an image to the answer button
                 if ($arrAnswer['singleSRC'] != '')
                 {
                     $objModel = \FilesModel::findByUuid($arrAnswer['singleSRC']);
-                    if ($objModel === null)
+                    if ($objModel !== null)
                     {
-                        if (!\Validator::isUuid($arrAnswer['singleSRC']))
+                        if (\Validator::isUuid($arrAnswer['singleSRC']))
                         {
-                            $tmpAnswerPic = '<p class="error">' . $GLOBALS['TL_LANG']['ERR']['version2format'] . '</p>';
+                            $objPartial->singleSRC = $objModel->path;
+                            $objPartial->alt = $arrAnswer['answer'];
                         }
-                    }
-                    elseif (is_file(TL_ROOT . '/' . $objModel->path))
-                    {
-                        $tmpAnswerPic = '<figure class="image_container">{{image::' . $objModel->path . '?width=100&height=100&rel=lightbox&alt=' . $arrAnswer['answer'] . '}}</figure>';
                     }
                 }
 
@@ -546,48 +553,34 @@ class ModuleQuiz extends \Module
                 // Validate answers
                 if ((!$arrAnswer['answerTrue'] && $answerKey == $arrQuestion['userAnswer']) || ($arrAnswer['answerTrue'] && $answerKey != $arrQuestion['userAnswer']))
                 {
-                    $answerIsCorrect = false;
+                    $blnAnswerIsCorrect = false;
                 }
 
                 if ($arrAnswer['answerTrue'])
                 {
-                    $htmlCode .= '<div id="answer_' . $objQuizItem->id . '_' . $answerKey . '" class="correct-answer">';
-                }
-                elseif (!$arrAnswer['answerTrue'] && $arrAnswer['checkedByUser'])
-                {
-                    $htmlCode .= '<div id="answer_' . $objQuizItem->id . '_' . $answerKey . '" class="incorrect-answer">';
-                }
-                else
-                {
-                    $htmlCode .= '<div id="answer_' . $objQuizItem->id . '_' . $answerKey . '">';
-                }
-
-
-                // Add picture to source code
-                if ($tmpAnswerPic != '')
-                {
-                    $htmlCode .= $tmpAnswerPic;
-                }
-
-
-                $checked = $arrAnswer['checkedByUser'] ? ' checked' : '';
-                $htmlCode .= '<span class="users-choice' . $checked . '"></span>';
-                $htmlCode .= sprintf('<label class="%s" for="check_answer_%s_%s"> %s</label>', $tmpLabelClass, $objQuizItem->id, $answerKey, $arrAnswer['answer']);
-                if ($arrAnswer['answerTrue'])
-                {
-                    $htmlCode .= ' <span class="resultcomment">' . $GLOBALS['TL_LANG']['MSC']['correct_answer'] . '</span>';
+                    $objPartial->class = 'correct-answer';
                 }
 
                 if (!$arrAnswer['answerTrue'] && $arrAnswer['checkedByUser'])
                 {
-                    $htmlCode .= ' <span class="resultcomment">' . $GLOBALS['TL_LANG']['MSC']['incorrect_answer'] . '</span>';
+                    $objPartial->class = 'incorrect-answer';
                 }
-                $htmlCode .= '</div>';
 
+                if ($arrAnswer['answerTrue'])
+                {
+                    $objPartial->resultComment = $GLOBALS['TL_LANG']['MSC']['correct_answer'];
+                }
+
+                if (!$arrAnswer['answerTrue'] && $arrAnswer['checkedByUser'])
+                {
+                    $objPartial->resultComment = $GLOBALS['TL_LANG']['MSC']['incorrect_answer'];
+                }
+
+                $strHtmlQuizItem .= $objPartial->parse();
             }
 
-            $objQuizItem->class = $answerIsCorrect ? ' answered-correct' : ' answered-false';
-            if ($answerIsCorrect)
+            $objQuizItem->class = $blnAnswerIsCorrect ? ' answered-correct' : ' answered-false';
+            if ($blnAnswerIsCorrect)
             {
                 $tmpUserRatings += $objQuizItem->rating;
             }
@@ -595,12 +588,12 @@ class ModuleQuiz extends \Module
             // Clean RTE output
             if ($objPage->outputFormat == 'xhtml')
             {
-                $objQuizItem->answers = \StringUtil::toXhtml($htmlCode);
+                $objQuizItem->answers = \StringUtil::toXhtml($strHtmlQuizItem);
                 $objQuizItem->parentTeaser = \StringUtil::toXhtml($objQuizItem->getRelated('pid')->teaser);
             }
             else
             {
-                $objQuizItem->answers = \StringUtil::toHtml5($htmlCode);
+                $objQuizItem->answers = \StringUtil::toHtml5($strHtmlQuizItem);
                 $objQuizItem->parentTeaser = \StringUtil::toHtml5($objQuizItem->getRelated('pid')->teaser);
             }
 
@@ -955,17 +948,17 @@ class ModuleQuiz extends \Module
             // Hacking prevention: There can be only one request per question
             if ($arrSession[$questionId]['answered'] != true)
             {
-                $eval = \QuizQuestionModel::evalAnswer($questionId,  $answerKey) ? 'true' : 'false';
+                $eval = \QuizQuestionModel::evalAnswer($questionId, $answerKey) ? 'true' : 'false';
                 $arrSession[$questionId]['answered'] = 'true';
                 $arrSession[$questionId]['eval'] = $eval;
-                $arrSession[$questionId]['userAnswer'] =  $answerKey;
+                $arrSession[$questionId]['userAnswer'] = $answerKey;
                 $arrSession[$questionId]['rightAnswer'] = \QuizQuestionModel::getAnswer($questionId);
-                $arrSession[$questionId]['arrAnswers'][ $answerKey]['checkedByUser'] = 'true';
+                $arrSession[$questionId]['arrAnswers'][$answerKey]['checkedByUser'] = 'true';
 
                 $this->addToSession('questions', $arrSession);
 
                 $json['eval'] = $eval;
-                $json['userAnswer'] =  $answerKey;
+                $json['userAnswer'] = $answerKey;
                 $json['rightAnswer'] = \QuizQuestionModel::getAnswer($questionId);
                 \QuizAnswerStatsModel::addClick($questionId, $answerKey);
                 $json['equalClicks'] = \QuizAnswerStatsModel::getClicks($questionId, $answerKey);
